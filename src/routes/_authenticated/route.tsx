@@ -43,7 +43,7 @@ function AuthenticatedLayout() {
   }, [user.id]);
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen text-foreground">
       <ThemeBackground />
       <main className="pb-24">
         <Outlet />
