@@ -236,7 +236,7 @@ function Composer({
     setSearching(true);
     const t = setTimeout(async () => {
       try {
-        const r = await searchITunes(q, 8);
+        const r = await searchITunes(q, 40);
         if (!cancelled) {
           setResults(r);
           setSearched(true);

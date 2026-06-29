@@ -45,7 +45,7 @@ export const findYouTubeMatch = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const apiKey = process.env.YOUTUBE_API_KEY;
     if (!apiKey) {
-      return { ok: false as const, error: "YouTube search is not configured." };
+      return { ok: false as const, error: "Auto-match unavailable. Paste a link, or" };
     }
     try {
       const primary = await ytSearch(`${data.query} official audio`, apiKey);
@@ -56,6 +56,6 @@ export const findYouTubeMatch = createServerFn({ method: "POST" })
       if (bare) return { ok: true as const, result: bare };
       return { ok: false as const, error: "No YouTube match found." };
     } catch {
-      return { ok: false as const, error: "YouTube search failed." };
+      return { ok: false as const, error: "Auto-match unavailable. Paste a link, or" };
     }
   });
