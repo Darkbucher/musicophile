@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ThemeBackground } from "@/components/ThemeBackground";
 
-
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
@@ -29,6 +28,7 @@ function AuthenticatedLayout() {
 
   useEffect(() => {
     refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const ch = supabase
       .channel(`unread-${user.id}`)
       .on(
@@ -37,7 +37,9 @@ function AuthenticatedLayout() {
         () => refresh(),
       )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [user.id]);
 
   return (
@@ -58,19 +60,35 @@ function BottomNav({ unread }: { unread: number }) {
   return (
     <nav className="fixed bottom-0 inset-x-0 border-t border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-md items-center justify-around py-3">
-        <Link to="/" activeOptions={{ exact: true }} className={linkBase} activeProps={{ className: `${linkBase} ${active}` }}>
+        <Link
+          to="/"
+          activeOptions={{ exact: true }}
+          className={linkBase}
+          activeProps={{ className: `${linkBase} ${active}` }}
+        >
           Inbox
           {unread > 0 && (
-            <span className="absolute -top-0.5 -right-1 inline-flex h-2 w-2 rounded-full bg-accent" aria-label={`${unread} unread`} />
+            <span
+              className="absolute -top-0.5 -right-1 inline-flex h-2 w-2 rounded-full bg-accent"
+              aria-label={`${unread} unread`}
+            />
           )}
         </Link>
         <Link to="/sent" className={linkBase} activeProps={{ className: `${linkBase} ${active}` }}>
           Sent
         </Link>
-        <Link to="/friends" className={linkBase} activeProps={{ className: `${linkBase} ${active}` }}>
+        <Link
+          to="/friends"
+          className={linkBase}
+          activeProps={{ className: `${linkBase} ${active}` }}
+        >
           Friends
         </Link>
-        <Link to="/settings" className={linkBase} activeProps={{ className: `${linkBase} ${active}` }}>
+        <Link
+          to="/settings"
+          className={linkBase}
+          activeProps={{ className: `${linkBase} ${active}` }}
+        >
           Settings
         </Link>
       </div>

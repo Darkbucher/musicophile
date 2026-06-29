@@ -16,7 +16,10 @@ interface Gift {
   note: string | null;
   created_at: string;
 }
-interface Profile { id: string; display_name: string; }
+interface Profile {
+  id: string;
+  display_name: string;
+}
 
 function SentPage() {
   const { user } = Route.useRouteContext();
@@ -35,9 +38,14 @@ function SentPage() {
       setGifts(list);
       const ids = Array.from(new Set(list.map((g) => g.recipient_id)));
       if (ids.length) {
-        const { data: profs } = await supabase.from("profiles").select("id,display_name").in("id", ids);
+        const { data: profs } = await supabase
+          .from("profiles")
+          .select("id,display_name")
+          .in("id", ids);
         const map: Record<string, Profile> = {};
-        (profs ?? []).forEach((p) => { map[p.id] = p as Profile; });
+        (profs ?? []).forEach((p) => {
+          map[p.id] = p as Profile;
+        });
         setProfiles(map);
       }
       setLoading(false);
@@ -56,7 +64,10 @@ function SentPage() {
       ) : gifts.length === 0 ? (
         <div className="rounded-md border border-dashed border-border px-6 py-12 text-center">
           <p className="font-serif text-xl">Nothing sent yet.</p>
-          <Link to="/friends" className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent">
+          <Link
+            to="/friends"
+            className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent"
+          >
             Send a song
           </Link>
         </div>
@@ -65,18 +76,25 @@ function SentPage() {
           {gifts.map((g) => (
             <li key={g.id} className="rounded-md border border-border bg-card p-5">
               <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-3">
-                to <span className="text-foreground">{profiles[g.recipient_id]?.display_name ?? "a friend"}</span>
+                to{" "}
+                <span className="text-foreground">
+                  {profiles[g.recipient_id]?.display_name ?? "a friend"}
+                </span>
                 <span className="mx-2 text-muted-foreground/60">·</span>
                 {timeAgo(g.created_at)}
               </p>
               <div className="flex items-center gap-4">
-                {g.artwork_url && <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />}
+                {g.artwork_url && (
+                  <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />
+                )}
                 <div className="min-w-0">
                   <p className="font-serif text-lg truncate">{g.track_name}</p>
                   <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
                 </div>
               </div>
-              {g.note && <p className="mt-3 font-serif italic text-foreground/70 text-sm">"{g.note}"</p>}
+              {g.note && (
+                <p className="mt-3 font-serif italic text-foreground/70 text-sm">{`"${g.note}"`}</p>
+              )}
             </li>
           ))}
         </ul>

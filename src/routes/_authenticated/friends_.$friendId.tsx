@@ -11,7 +11,11 @@ export const Route = createFileRoute("/_authenticated/friends_/$friendId")({
   component: FriendThreadPage,
 });
 
-interface Profile { id: string; display_name: string; avatar_url: string | null; }
+interface Profile {
+  id: string;
+  display_name: string;
+  avatar_url: string | null;
+}
 interface Gift {
   id: string;
   sender_id: string;
@@ -34,25 +38,38 @@ function FriendThreadPage() {
   const [composerOpen, setComposerOpen] = useState(false);
 
   async function load() {
-    const { data: prof } = await supabase.from("profiles").select("id,display_name,avatar_url").eq("id", friendId).maybeSingle();
+    const { data: prof } = await supabase
+      .from("profiles")
+      .select("id,display_name,avatar_url")
+      .eq("id", friendId)
+      .maybeSingle();
     setFriend(prof as Profile | null);
     const { data: fs } = await supabase
-      .from("friendships").select("status")
-      .or(`and(requester_id.eq.${user.id},addressee_id.eq.${friendId}),and(requester_id.eq.${friendId},addressee_id.eq.${user.id})`)
+      .from("friendships")
+      .select("status")
+      .or(
+        `and(requester_id.eq.${user.id},addressee_id.eq.${friendId}),and(requester_id.eq.${friendId},addressee_id.eq.${user.id})`,
+      )
       .maybeSingle();
     setAllowed(fs?.status === "accepted");
 
     const { data } = await supabase
       .from("gifts")
-      .select("id,sender_id,recipient_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at")
-      .or(`and(sender_id.eq.${user.id},recipient_id.eq.${friendId}),and(sender_id.eq.${friendId},recipient_id.eq.${user.id})`)
+      .select(
+        "id,sender_id,recipient_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at",
+      )
+      .or(
+        `and(sender_id.eq.${user.id},recipient_id.eq.${friendId}),and(sender_id.eq.${friendId},recipient_id.eq.${user.id})`,
+      )
       .order("created_at", { ascending: false });
     setGifts((data as Gift[] | null) ?? []);
   }
 
   useEffect(() => {
     load();
-    const involvesThread = (row: { sender_id?: string; recipient_id?: string } | null | undefined) => {
+    const involvesThread = (
+      row: { sender_id?: string; recipient_id?: string } | null | undefined,
+    ) => {
       if (!row) return false;
       return (
         (row.sender_id === user.id && row.recipient_id === friendId) ||
@@ -67,12 +84,17 @@ function FriendThreadPage() {
         if (involvesThread(next) || involvesThread(prev)) load();
       })
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [user.id, friendId]);
 
   return (
     <div className="mx-auto max-w-md px-6 pt-10">
-      <Link to="/friends" className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground">
+      <Link
+        to="/friends"
+        className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"
+      >
         ← friends
       </Link>
 
@@ -80,7 +102,9 @@ function FriendThreadPage() {
         <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Between you and</p>
         <h1 className="font-serif text-4xl mt-1">{friend?.display_name ?? "…"}</h1>
         <p className="mt-2 text-sm italic text-muted-foreground">
-          {gifts.length === 0 ? "No songs yet." : `${gifts.length} song${gifts.length === 1 ? "" : "s"} shared.`}
+          {gifts.length === 0
+            ? "No songs yet."
+            : `${gifts.length} song${gifts.length === 1 ? "" : "s"} shared.`}
         </p>
       </header>
 
@@ -98,24 +122,31 @@ function FriendThreadPage() {
           const mine = g.sender_id === user.id;
           return (
             <li key={g.id} className="relative">
-              <span className={`absolute -left-[26px] top-2 inline-block h-2 w-2 rounded-full ${mine ? "bg-muted-foreground/50" : "bg-accent"}`} />
+              <span
+                className={`absolute -left-[26px] top-2 inline-block h-2 w-2 rounded-full ${mine ? "bg-muted-foreground/50" : "bg-accent"}`}
+              />
               <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
                 {mine ? "you sent" : `${friend?.display_name ?? "they"} sent`}
                 <span className="mx-2 text-muted-foreground/60">·</span>
                 <span title={fullDate(g.created_at)}>{timeAgo(g.created_at)}</span>
               </div>
               <Link
-                to="/gift/$id" params={{ id: g.id }}
+                to="/gift/$id"
+                params={{ id: g.id }}
                 className="block rounded-md border border-border bg-card p-4 hover:border-accent transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  {g.artwork_url && <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />}
+                  {g.artwork_url && (
+                    <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />
+                  )}
                   <div className="min-w-0">
                     <p className="font-serif text-lg truncate">{g.track_name}</p>
                     <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
                   </div>
                 </div>
-                {g.note && <p className="mt-3 font-serif italic text-foreground/80 text-sm">"{g.note}"</p>}
+                {g.note && (
+                  <p className="mt-3 font-serif italic text-foreground/80 text-sm">{`"${g.note}"`}</p>
+                )}
               </Link>
             </li>
           );
@@ -126,14 +157,25 @@ function FriendThreadPage() {
         <Composer
           friend={friend}
           onClose={() => setComposerOpen(false)}
-          onSent={() => { setComposerOpen(false); load(); }}
+          onSent={() => {
+            setComposerOpen(false);
+            load();
+          }}
         />
       )}
     </div>
   );
 }
 
-function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () => void; onSent: () => void }) {
+function Composer({
+  friend,
+  onClose,
+  onSent,
+}: {
+  friend: Profile;
+  onClose: () => void;
+  onSent: () => void;
+}) {
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const ytSearch = useServerFn(findYouTubeMatch);
@@ -163,20 +205,33 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
   useEffect(() => {
     if (mode !== "search" || picked) return;
     const q = query.trim();
-    if (q.length < 2) { setResults([]); setSearched(false); return; }
+    if (q.length < 2) {
+      setResults([]);
+      setSearched(false);
+      return;
+    }
     let cancelled = false;
     setSearching(true);
     const t = setTimeout(async () => {
       try {
         const r = await searchITunes(q, 8);
-        if (!cancelled) { setResults(r); setSearched(true); }
+        if (!cancelled) {
+          setResults(r);
+          setSearched(true);
+        }
       } catch {
-        if (!cancelled) { setResults([]); setSearched(true); }
+        if (!cancelled) {
+          setResults([]);
+          setSearched(true);
+        }
       } finally {
         if (!cancelled) setSearching(false);
       }
     }, 350);
-    return () => { cancelled = true; clearTimeout(t); };
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
   }, [query, mode, picked]);
 
   async function pickTrack(t: ITunesTrack) {
@@ -211,27 +266,36 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
   const youtubeId = extractYouTubeId(youtubeInput);
   const youtubeBad = youtubeInput.trim().length > 0 && !youtubeId;
 
-  const effectiveTrack = mode === "search" ? picked?.trackName ?? "" : manualTrack.trim();
-  const effectiveArtist = mode === "search" ? picked?.artistName ?? "" : manualArtist.trim();
-  const effectiveArtwork = mode === "search" ? upgradeArtwork(picked?.artworkUrl100, 600) ?? null : null;
+  const effectiveTrack = mode === "search" ? (picked?.trackName ?? "") : manualTrack.trim();
+  const effectiveArtist = mode === "search" ? (picked?.artistName ?? "") : manualArtist.trim();
+  const effectiveArtwork =
+    mode === "search" ? (upgradeArtwork(picked?.artworkUrl100, 600) ?? null) : null;
   const canSend = effectiveTrack.length > 0 && !!youtubeId && !sending;
 
   async function send() {
     if (!canSend) return;
-    setSending(true); setError(null);
-    const { data, error: insErr } = await supabase.from("gifts").insert({
-      sender_id: user.id,
-      recipient_id: friend.id,
-      track_id: picked?.trackId ? String(picked.trackId) : null,
-      track_name: effectiveTrack,
-      artist_name: effectiveArtist || "Unknown artist",
-      artwork_url: effectiveArtwork,
-      youtube_url: youtubeInput.trim() || null,
-      youtube_video_id: youtubeId,
-      note: note.trim() || null,
-    }).select("id").single();
+    setSending(true);
+    setError(null);
+    const { data, error: insErr } = await supabase
+      .from("gifts")
+      .insert({
+        sender_id: user.id,
+        recipient_id: friend.id,
+        track_id: picked?.trackId ? String(picked.trackId) : null,
+        track_name: effectiveTrack,
+        artist_name: effectiveArtist || "Unknown artist",
+        artwork_url: effectiveArtwork,
+        youtube_url: youtubeInput.trim() || null,
+        youtube_video_id: youtubeId,
+        note: note.trim() || null,
+      })
+      .select("id")
+      .single();
     setSending(false);
-    if (insErr) { setError(insErr.message); return; }
+    if (insErr) {
+      setError(insErr.message);
+      return;
+    }
     onSent();
     if (data?.id) navigate({ to: "/gift/$id", params: { id: data.id } });
   }
@@ -241,12 +305,19 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
       <div className="w-full max-w-lg rounded-md border border-border bg-card p-6 shadow-xl">
         <div className="flex items-center justify-between mb-5">
           <h2 className="font-serif text-2xl">For {friend.display_name}</h2>
-          <button onClick={onClose} className="text-xs uppercase tracking-[0.18em] text-muted-foreground">close</button>
+          <button
+            onClick={onClose}
+            className="text-xs uppercase tracking-[0.18em] text-muted-foreground"
+          >
+            close
+          </button>
         </div>
 
         {mode === "search" ? (
           <>
-            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">1. Song</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
+              1. Song
+            </p>
 
             {!picked ? (
               <>
@@ -257,9 +328,13 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
                   autoFocus
                   className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent mb-3"
                 />
-                {searching && <p className="text-xs italic text-muted-foreground mb-2">Searching…</p>}
+                {searching && (
+                  <p className="text-xs italic text-muted-foreground mb-2">Searching…</p>
+                )}
                 {!searching && searched && results.length === 0 && (
-                  <p className="text-xs italic text-muted-foreground mb-2">No matches — try a different search.</p>
+                  <p className="text-xs italic text-muted-foreground mb-2">
+                    No matches — try a different search.
+                  </p>
                 )}
                 <ul className="max-h-72 space-y-2 overflow-y-auto">
                   {results.map((t) => (
@@ -269,10 +344,14 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
                         onClick={() => pickTrack(t)}
                         className="flex w-full items-center gap-3 rounded-md border border-border/60 bg-background/40 p-2 text-left hover:border-accent transition-colors"
                       >
-                        {t.artworkUrl100 && <img src={t.artworkUrl100} alt="" className="h-10 w-10 rounded-sm" />}
+                        {t.artworkUrl100 && (
+                          <img src={t.artworkUrl100} alt="" className="h-10 w-10 rounded-sm" />
+                        )}
                         <span className="min-w-0 flex-1">
                           <span className="block font-serif truncate">{t.trackName}</span>
-                          <span className="block truncate text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{t.artistName}</span>
+                          <span className="block truncate text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                            {t.artistName}
+                          </span>
                         </span>
                       </button>
                     </li>
@@ -280,7 +359,10 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
                 </ul>
                 <button
                   type="button"
-                  onClick={() => { setMode("manual"); setManualTrack(query); }}
+                  onClick={() => {
+                    setMode("manual");
+                    setManualTrack(query);
+                  }}
                   className="mt-4 text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-accent"
                 >
                   Enter manually instead
@@ -288,22 +370,37 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
               </>
             ) : (
               <div className="mb-5 flex items-center gap-3 rounded-md border border-accent/60 bg-background/40 p-3">
-                {picked.artworkUrl100 && <img src={picked.artworkUrl100} alt="" className="h-12 w-12 rounded-sm" />}
+                {picked.artworkUrl100 && (
+                  <img src={picked.artworkUrl100} alt="" className="h-12 w-12 rounded-sm" />
+                )}
                 <div className="min-w-0 flex-1">
                   <p className="font-serif truncate">{picked.trackName}</p>
-                  <p className="truncate text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{picked.artistName}</p>
+                  <p className="truncate text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {picked.artistName}
+                  </p>
                 </div>
-                <button onClick={clearPick} className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-accent">✕ change</button>
+                <button
+                  onClick={clearPick}
+                  className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-accent"
+                >
+                  ✕ change
+                </button>
               </div>
             )}
           </>
         ) : (
           <>
             <div className="mb-1 flex items-center justify-between">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">1. Song (manual)</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                1. Song (manual)
+              </p>
               <button
                 type="button"
-                onClick={() => { setMode("search"); setManualTrack(""); setManualArtist(""); }}
+                onClick={() => {
+                  setMode("search");
+                  setManualTrack("");
+                  setManualArtist("");
+                }}
                 className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-accent"
               >
                 ← back to search
@@ -328,20 +425,40 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
           <>
             <label className="block text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
               2. YouTube link
-              {autoMatched && <span className="ml-2 normal-case tracking-normal text-[10px] text-accent">auto-matched, tap to change</span>}
-              {ytLoading && <span className="ml-2 normal-case tracking-normal text-[10px] text-muted-foreground">searching YouTube…</span>}
+              {autoMatched && (
+                <span className="ml-2 normal-case tracking-normal text-[10px] text-accent">
+                  auto-matched, tap to change
+                </span>
+              )}
+              {ytLoading && (
+                <span className="ml-2 normal-case tracking-normal text-[10px] text-muted-foreground">
+                  searching YouTube…
+                </span>
+              )}
             </label>
             <input
               placeholder="https://youtube.com/watch?v=…"
               value={youtubeInput}
-              onChange={(e) => { setYoutubeInput(e.target.value); setAutoMatched(false); }}
+              onChange={(e) => {
+                setYoutubeInput(e.target.value);
+                setAutoMatched(false);
+              }}
               className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent mb-1"
             />
-            {youtubeBad && <p className="text-xs text-destructive mb-2">That doesn't look like a YouTube link.</p>}
+            {youtubeBad && (
+              <p className="text-xs text-destructive mb-2">
+                That doesn't look like a YouTube link.
+              </p>
+            )}
             {ytError && !youtubeInput && (
               <a
-                href={picked ? youtubeSearchUrl(picked.trackName, picked.artistName) : "https://youtube.com"}
-                target="_blank" rel="noreferrer"
+                href={
+                  picked
+                    ? youtubeSearchUrl(picked.trackName, picked.artistName)
+                    : "https://youtube.com"
+                }
+                target="_blank"
+                rel="noreferrer"
                 className="mb-2 inline-block text-xs text-accent underline-offset-4 hover:underline"
               >
                 {ytError} Search YouTube ↗
@@ -360,7 +477,9 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
                   className="aspect-video w-full object-cover opacity-90 group-hover:opacity-100"
                 />
                 <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-background/80 text-foreground">▶</span>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-background/80 text-foreground">
+                    ▶
+                  </span>
                 </span>
                 <span className="absolute bottom-2 left-2 right-2 truncate text-left text-[10px] uppercase tracking-[0.18em] text-white/90">
                   preview — tap to play
@@ -369,7 +488,10 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
             )}
 
             <label className="mt-2 block text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
-              3. A line <span className="text-muted-foreground/70 normal-case tracking-normal">(optional)</span>
+              3. A line{" "}
+              <span className="text-muted-foreground/70 normal-case tracking-normal">
+                (optional)
+              </span>
             </label>
             <textarea
               placeholder="this reminded me of…"
@@ -398,7 +520,10 @@ function Composer({ friend, onClose, onSent }: { friend: Profile; onClose: () =>
             onClick={() => setPreviewOpen(false)}
           >
             <div className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
-              <div className="relative w-full overflow-hidden rounded-md border border-border bg-black" style={{ paddingTop: "56.25%" }}>
+              <div
+                className="relative w-full overflow-hidden rounded-md border border-border bg-black"
+                style={{ paddingTop: "56.25%" }}
+              >
                 <iframe
                   className="absolute inset-0 h-full w-full"
                   src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}

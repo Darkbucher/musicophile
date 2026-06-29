@@ -1,14 +1,41 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-export type Theme = "parchment" | "midnight" | "liquid" | "flower" | "retro" | "forest";
+export type Theme =
+  | "parchment"
+  | "midnight"
+  | "liquid"
+  | "flower"
+  | "autumn"
+  | "winter"
+  | "aurora"
+  | "fire"
+  | "bamboo";
 
 export const THEMES: { id: Theme; label: string; emoji: string; blurb: string }[] = [
-  { id: "parchment", label: "Parchment", emoji: "📜", blurb: "Aged manuscript, dust motes, warm candlelight." },
-  { id: "midnight", label: "Midnight", emoji: "🌙", blurb: "Cosmic night — stars, moon, shooting meteors." },
-  { id: "liquid",   label: "Liquid",   emoji: "🌧️", blurb: "Rainfall, deep water, ripples on click." },
-  { id: "flower",   label: "Flower",   emoji: "🌸", blurb: "Falling petals, pollen, blooming garden." },
-  { id: "retro",    label: "Retro",    emoji: "👾", blurb: "Arcade grid, CRT scanlines, neon glow." },
-  { id: "forest",   label: "Forest",   emoji: "🌲", blurb: "Fireflies, moonbeams, ancient canopy." },
+  {
+    id: "parchment",
+    label: "Parchment",
+    emoji: "📜",
+    blurb: "Aged manuscript, candlelight, floating dust.",
+  },
+  {
+    id: "midnight",
+    label: "Midnight",
+    emoji: "🌙",
+    blurb: "Cosmic night — stars, moon, meteor showers.",
+  },
+  { id: "liquid", label: "Rain", emoji: "🌧️", blurb: "Rainfall, ripples, deep water, mist." },
+  { id: "flower", label: "Garden", emoji: "🌸", blurb: "Falling petals, butterflies, pollen." },
+  {
+    id: "autumn",
+    label: "Autumn",
+    emoji: "🍂",
+    blurb: "Drifting maple leaves, golden amber glow.",
+  },
+  { id: "winter", label: "Winter", emoji: "❄️", blurb: "Falling snow, frost crystals, icy mist." },
+  { id: "aurora", label: "Aurora", emoji: "🌌", blurb: "Northern lights, mountains, night sky." },
+  { id: "fire", label: "Fire", emoji: "🔥", blurb: "Embers, flames, lava glow, heat shimmer." },
+  { id: "bamboo", label: "Zen", emoji: "🎋", blurb: "Bamboo forest, mist, flowing stream." },
 ];
 
 const STORAGE_KEY = "musicophile-theme";
@@ -24,7 +51,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
       if (saved && THEMES.some((t) => t.id === saved)) setThemeState(saved);
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
@@ -33,7 +62,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   function setTheme(t: Theme) {
     setThemeState(t);
-    try { localStorage.setItem(STORAGE_KEY, t); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, t);
+    } catch {
+      // ignore
+    }
   }
 
   return <ThemeCtx.Provider value={{ theme, setTheme }}>{children}</ThemeCtx.Provider>;

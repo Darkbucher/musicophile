@@ -39,7 +39,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="font-serif text-2xl text-foreground">Something went quiet.</h1>
         <p className="mt-2 text-sm text-muted-foreground">Try again in a moment.</p>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-6 rounded-md border border-border px-4 py-2 text-sm hover:bg-secondary"
         >
           Try again
@@ -55,7 +58,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Musicophile — songs sent like letters" },
-      { name: "description", content: "Send songs to friends as personal messages. No feed, no algorithm — just one friend, one song, one note." },
+      {
+        name: "description",
+        content:
+          "Send songs to friends as personal messages. No feed, no algorithm — just one friend, one song, one note.",
+      },
       { name: "theme-color", content: "#f5f0e6" },
     ],
     links: [
@@ -77,7 +84,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head><HeadContent /></head>
+      <head>
+        <HeadContent />
+      </head>
       <body>
         {children}
         <Scripts />

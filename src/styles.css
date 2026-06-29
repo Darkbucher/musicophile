@@ -1,11 +1,11 @@
-@import "tailwindcss" source(none);
+﻿@import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Musicophile — 6-theme premium immersive design system.
+ * Musicophile — 9-theme premium immersive design system.
  * Themes switch via [data-theme="..."] on <html>. Parchment is the default.
  */
 
@@ -14,381 +14,918 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-background:          var(--background);
-  --color-foreground:          var(--foreground);
-  --color-card:                var(--card);
-  --color-card-foreground:     var(--card-foreground);
-  --color-popover:             var(--popover);
-  --color-popover-foreground:  var(--popover-foreground);
-  --color-primary:             var(--primary);
-  --color-primary-foreground:  var(--primary-foreground);
-  --color-secondary:           var(--secondary);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted:               var(--muted);
-  --color-muted-foreground:    var(--muted-foreground);
-  --color-accent:              var(--accent);
-  --color-accent-foreground:   var(--accent-foreground);
-  --color-destructive:         var(--destructive);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border:              var(--border);
-  --color-input:               var(--input);
-  --color-ring:                var(--ring);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
   --font-serif: var(--serif-font, "Cormorant Garamond", "Iowan Old Style", Georgia, serif);
-  --font-sans:  "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* ── Original envelope / gift animations ── */
-  --animate-envelope-pulse:    envelope-pulse 2.4s ease-in-out infinite;
-  --animate-flap-open:         flap-open 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
-  --animate-letter-rise:       letter-rise 0.55s cubic-bezier(0.34,1.2,0.64,1) forwards;
-  --animate-gift-reveal:       gift-reveal 0.5s ease-out forwards;
+  /* -- Envelope / gift animations -- */
+  --animate-envelope-pulse: envelope-pulse 2.4s ease-in-out infinite;
+  --animate-flap-open: flap-open 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  --animate-letter-rise: letter-rise 0.55s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  --animate-gift-reveal: gift-reveal 0.5s ease-out forwards;
 
-  /* ── Botanical float animations (FlowerScene) ── */
-  --animate-botanicals-float:  botanicals-float 9s ease-in-out infinite alternate;
-  --animate-float-blossom-a:   float-blossom-a 6s ease-in-out infinite;
-  --animate-float-blossom-b:   float-blossom-b 8s ease-in-out infinite;
+  /* -- Flower reveal petal -- */
+  --animate-petal-drift: petal-drift 1.5s ease-in forwards;
 
-  /* ── Flower reveal petal ── */
-  --animate-petal-drift:       petal-drift 1.5s ease-in forwards;
+  /* -- PARCHMENT -- */
+  --animate-candle-breath: candle-breath 5s ease-in-out infinite;
+  --animate-parchment-glow: parchment-glow 7s ease-in-out infinite;
+  --animate-dust-rise: dust-rise 14s ease-in-out infinite;
+  --animate-paper-fiber: paper-fiber 18s ease-in-out infinite;
+  --animate-ink-seep: ink-seep 20s ease-in-out infinite;
 
-  /* ── PARCHMENT ── */
-  --animate-candle-breath:     candle-breath 5s ease-in-out infinite;
-  --animate-parchment-glow:    parchment-glow 7s ease-in-out infinite;
-  --animate-dust-rise:         dust-rise 14s ease-in-out infinite;
+  /* -- MIDNIGHT -- */
+  --animate-star-twinkle: star-twinkle 2.4s ease-in-out infinite;
+  --animate-moon-glow-pulse: moon-glow-pulse 4s ease-in-out infinite;
+  --animate-shooting-star: shooting-star 22s linear infinite;
+  --animate-nebula-drift: nebula-drift 18s ease-in-out infinite alternate;
+  --animate-cosmic-dust: cosmic-dust 12s ease-in-out infinite;
+  --animate-cloud-drift: cloud-drift 35s linear infinite;
 
-  /* ── MIDNIGHT ── */
-  --animate-star-twinkle:      star-twinkle 2.4s ease-in-out infinite;
-  --animate-moon-glow-pulse:   moon-glow-pulse 4s ease-in-out infinite;
-  --animate-shooting-star:     shooting-star 22s linear infinite;
-  --animate-nebula-drift:      nebula-drift 18s ease-in-out infinite alternate;
-
-  /* ── LIQUID ── */
-  --animate-water-drift:       water-drift 24s ease-in-out infinite alternate;
-  --animate-rain-fall:         rain-fall 1s linear infinite;
-  --animate-wave-pulse:        wave-pulse 6s ease-in-out infinite;
+  /* -- LIQUID -- */
+  --animate-water-drift: water-drift 24s ease-in-out infinite alternate;
+  --animate-rain-fall: rain-fall 1s linear infinite;
+  --animate-wave-pulse: wave-pulse 6s ease-in-out infinite;
   --animate-water-ripple-click: water-ripple-click 0.8s ease-out forwards;
+  --animate-mist-drift: mist-drift 20s ease-in-out infinite alternate;
 
-  /* ── FLOWER ── */
-  --animate-petal-fall-slow:   petal-fall-slow 12s ease-in infinite;
-  --animate-pollen-drift:      pollen-drift 11s ease-in-out infinite;
+  /* -- FLOWER -- */
+  --animate-botanicals-float: botanicals-float 9s ease-in-out infinite alternate;
+  --animate-float-blossom-a: float-blossom-a 6s ease-in-out infinite;
+  --animate-float-blossom-b: float-blossom-b 8s ease-in-out infinite;
+  --animate-petal-fall-slow: petal-fall-slow 12s ease-in infinite;
+  --animate-pollen-drift: pollen-drift 11s ease-in-out infinite;
+  --animate-butterfly-flutter: butterfly-flutter 3s ease-in-out infinite;
+  --animate-butterfly-path: butterfly-path 22s ease-in-out infinite;
 
-  /* ── RETRO ── */
-  --animate-neon-sweep:        neon-sweep 6s linear infinite;
-  --animate-pixel-drift:       pixel-drift 8s ease-in-out infinite;
+  /* -- AUTUMN -- */
+  --animate-leaf-fall: leaf-fall 10s ease-in infinite;
+  --animate-golden-glow: golden-glow 6s ease-in-out infinite;
+  --animate-fog-drift: fog-drift 25s ease-in-out infinite alternate;
+  --animate-sunray: sunray 8s ease-in-out infinite;
 
-  /* ── FOREST ── */
-  --animate-moonlight-breath:  moonlight-breath 6s ease-in-out infinite;
-  --animate-moonbeam-sway:     moonbeam-sway 8s ease-in-out infinite;
-  --animate-firefly-wander:    firefly-wander 10s ease-in-out infinite alternate;
-  --animate-firefly-blink:     firefly-blink 2s ease-in-out infinite;
+  /* -- WINTER -- */
+  --animate-snow-fall: snow-fall 8s linear infinite;
+  --animate-frost-grow: frost-grow 4s ease-out forwards;
+  --animate-ice-sparkle: ice-sparkle 3s ease-in-out infinite;
+  --animate-mist-freeze: mist-freeze 15s ease-in-out infinite alternate;
+
+  /* -- AURORA -- */
+  --animate-aurora-wave: aurora-wave 12s ease-in-out infinite alternate;
+  --animate-aurora-shimmer: aurora-shimmer 4s ease-in-out infinite;
+  --animate-star-drift: star-drift 30s linear infinite;
+
+  /* -- FIRE -- */
+  --animate-ember-rise: ember-rise 4s ease-out infinite;
+  --animate-flame-dance: flame-dance 0.8s ease-in-out infinite;
+  --animate-lava-glow: lava-glow 3s ease-in-out infinite;
+  --animate-heat-shimmer: heat-shimmer 2s ease-in-out infinite;
+
+  /* -- BAMBOO -- */
+  --animate-bamboo-sway: bamboo-sway 6s ease-in-out infinite;
+  --animate-bamboo-leaf: bamboo-leaf 8s ease-in-out infinite;
+  --animate-stream-flow: stream-flow 10s ease-in-out infinite alternate;
+  --animate-zen-mist: zen-mist 18s ease-in-out infinite alternate;
+  --animate-bird-fly: bird-fly 30s linear infinite;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
    KEYFRAMES
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Original envelope / gift ── */
+/* -- Envelope / gift -- */
 @keyframes envelope-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 40%, transparent); }
-  50%       { box-shadow: 0 0 28px 6px color-mix(in oklab, var(--accent) 30%, transparent); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 40%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 28px 6px color-mix(in oklab, var(--accent) 30%, transparent);
+  }
 }
 @keyframes flap-open {
-  from { transform: perspective(700px) rotateX(0deg); }
-  to   { transform: perspective(700px) rotateX(-180deg); }
+  from {
+    transform: perspective(700px) rotateX(0deg);
+  }
+  to {
+    transform: perspective(700px) rotateX(-180deg);
+  }
 }
 @keyframes letter-rise {
-  0%   { transform: translateY(45%); opacity: 0; }
-  70%  { transform: translateY(-5%); opacity: 1; }
-  100% { transform: translateY(0);   opacity: 1; }
+  0% {
+    transform: translateY(45%);
+    opacity: 0;
+  }
+  70% {
+    transform: translateY(-5%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 @keyframes gift-reveal {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ── Botanicals ── */
-@keyframes botanicals-float {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(2%, -2%); }
-}
-@keyframes float-blossom-a {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50%       { transform: translateY(-10px) rotate(4deg); }
-}
-@keyframes float-blossom-b {
-  0%, 100% { transform: translateY(0) rotate(2deg); }
-  50%       { transform: translateY(-12px) rotate(-3deg); }
-}
-
-/* ── Flower reveal petal ── */
+/* -- Petal reveal -- */
 @keyframes petal-drift {
-  0%   { transform: translate(0, -20px) rotate(0); opacity: 0; }
-  15%  { opacity: 1; }
-  100% { transform: translate(var(--petal-x, 30px), 230px) rotate(230deg); opacity: 0; }
+  0% {
+    transform: translate(0, -20px) rotate(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--petal-x, 30px), 230px) rotate(230deg);
+    opacity: 0;
+  }
 }
 
-/* ────────────────────────── PARCHMENT ──────────────────────────── */
+/* PARCHMENT */
 @keyframes candle-breath {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50%       { opacity: 0.9; transform: scale(1.08); }
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 0.85;
+    transform: scale(1.12);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.06);
+  }
 }
 @keyframes parchment-glow {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50%       { opacity: 0.9; transform: scale(1.06); }
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
 }
 @keyframes dust-rise {
-  0%   { transform: translateY(0) translateX(0); opacity: 0; }
-  12%  { opacity: 1; }
-  85%  { opacity: 0.55; }
-  100% { transform: translateY(-90px) translateX(22px); opacity: 0; }
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-110px) translateX(28px);
+    opacity: 0;
+  }
+}
+@keyframes paper-fiber {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(20px) rotate(180deg);
+    opacity: 0.7;
+  }
+}
+@keyframes ink-seep {
+  0%,
+  100% {
+    opacity: 0.03;
+  }
+  50% {
+    opacity: 0.07;
+  }
 }
 
-/* ─────────────────────────── MIDNIGHT ─────────────────────────── */
+/* MIDNIGHT */
 @keyframes star-twinkle {
-  0%, 100% { opacity: 0.15; transform: scale(0.75); }
-  50%       { opacity: 1;    transform: scale(1.25); }
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
 }
 @keyframes moon-glow-pulse {
-  0%, 100% { opacity: 0.80; transform: scale(0.97); }
-  50%       { opacity: 1;    transform: scale(1.04); }
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 @keyframes shooting-star {
-  /* Action compressed into first 10% of the cycle; rest is invisible wait */
-  0%   { transform: translateX(0) translateY(0) rotate(35deg); opacity: 0; width: 0; }
-  1%   { opacity: 1; width: 140px; }
-  10%  { transform: translateX(520px) translateY(360px) rotate(35deg); opacity: 0; width: 0; }
-  100% { transform: translateX(520px) translateY(360px) rotate(35deg); opacity: 0; }
+  0% {
+    transform: translateX(0) translateY(0) rotate(35deg);
+    opacity: 0;
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+    width: 180px;
+  }
+  10% {
+    transform: translateX(560px) translateY(380px) rotate(35deg);
+    opacity: 0;
+    width: 0;
+  }
+  100% {
+    transform: translateX(560px) translateY(380px) rotate(35deg);
+    opacity: 0;
+  }
 }
 @keyframes nebula-drift {
-  from { transform: translate(-50%, -50%) scale(1);    opacity: 0.7; }
-  to   { transform: translate(-50%, -53%) scale(1.10); opacity: 0.95; }
+  from {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate(-50%, -54%) scale(1.12);
+    opacity: 0.9;
+  }
+}
+@keyframes cosmic-dust {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.2;
+  }
+  33% {
+    transform: translate(15px, -10px);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translate(-8px, 12px);
+    opacity: 0.35;
+  }
+}
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-120px);
+  }
+  to {
+    transform: translateX(110vw);
+  }
 }
 
-/* ──────────────────────────── LIQUID ───────────────────────────── */
+/* LIQUID */
 @keyframes water-drift {
-  from { transform: translate(-4%, -2%); }
-  to   { transform: translate(4%, 3%); }
+  from {
+    transform: translate(-5%, -3%);
+  }
+  to {
+    transform: translate(5%, 4%);
+  }
 }
 @keyframes rain-fall {
-  0%   { transform: translateY(-120px); opacity: 0; }
-  8%   { opacity: 1; }
-  92%  { opacity: 0.9; }
-  100% { transform: translateY(110vh); opacity: 0; }
+  0% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
 }
 @keyframes wave-pulse {
-  0%, 100% { transform: translateX(0) scaleY(1); }
-  50%       { transform: translateX(-1.5%) scaleY(1.06); }
+  0%,
+  100% {
+    transform: translateX(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-1.5%) scaleY(1.06);
+  }
 }
 @keyframes water-ripple-click {
-  from { transform: translate(-50%, -50%) scale(0);   opacity: 0.65; }
-  to   { transform: translate(-50%, -50%) scale(40);  opacity: 0; }
+  from {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(45);
+    opacity: 0;
+  }
+}
+@keyframes mist-drift {
+  from {
+    transform: translateX(-5%) scaleX(1.1);
+    opacity: 0.18;
+  }
+  to {
+    transform: translateX(5%) scaleX(1);
+    opacity: 0.06;
+  }
 }
 
-/* ──────────────────────────── FLOWER ───────────────────────────── */
-@keyframes petal-fall-slow {
-  0%   { transform: translateX(0) translateY(-30px) rotate(0deg); opacity: 0; }
-  8%   { opacity: 0.8; }
-  92%  { opacity: 0.55; }
+/* FLOWER */
+@keyframes botanicals-float {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(2%, -2%);
+  }
+}
+@keyframes float-blossom-a {
+  0%,
   100% {
-    transform: translateX(var(--petal-drift, 50px)) translateY(108vh) rotate(400deg);
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(5deg);
+  }
+}
+@keyframes float-blossom-b {
+  0%,
+  100% {
+    transform: translateY(0) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-4deg);
+  }
+}
+@keyframes petal-fall-slow {
+  0% {
+    transform: translateX(0) translateY(-30px) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  92% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(var(--petal-drift, 60px)) translateY(108vh) rotate(420deg);
     opacity: 0;
   }
 }
 @keyframes pollen-drift {
-  0%, 100% { transform: translateY(0) translateX(0);   opacity: 0.35; }
-  25%       { transform: translateY(-22px) translateX(9px);  opacity: 0.75; }
-  50%       { transform: translateY(-10px) translateX(-6px); opacity: 0.50; }
-  75%       { transform: translateY(-28px) translateX(4px);  opacity: 0.80; }
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-25px) translateX(10px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-12px) translateX(-8px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px);
+    opacity: 0.85;
+  }
+}
+@keyframes butterfly-flutter {
+  0%,
+  100% {
+    transform: scaleX(1) rotate(-5deg);
+  }
+  50% {
+    transform: scaleX(0.3) rotate(5deg);
+  }
+}
+@keyframes butterfly-path {
+  0% {
+    transform: translate(0vw, 0vh);
+  }
+  25% {
+    transform: translate(20vw, -15vh);
+  }
+  50% {
+    transform: translate(50vw, 5vh);
+  }
+  75% {
+    transform: translate(70vw, -20vh);
+  }
+  100% {
+    transform: translate(100vw, 10vh);
+  }
 }
 
-/* ──────────────────────────── RETRO ────────────────────────────── */
-@keyframes neon-sweep {
-  from { transform: translateY(0); }
-  to   { transform: translateY(100vh); }
+/* AUTUMN */
+@keyframes leaf-fall {
+  0% {
+    transform: translateX(0) translateY(-40px) rotate(0deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(var(--leaf-drift, 80px)) translateY(108vh)
+      rotate(var(--leaf-spin, 540deg));
+    opacity: 0;
+  }
 }
-@keyframes pixel-drift {
-  0%, 100% { transform: translate(0, 0);      opacity: 0.35; }
-  25%       { transform: translate(12px,-18px); opacity: 0.70; }
-  75%       { transform: translate(-9px, 12px); opacity: 0.50; }
+@keyframes golden-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+}
+@keyframes fog-drift {
+  from {
+    transform: translateX(-8%) scaleX(1.2);
+    opacity: 0.15;
+  }
+  to {
+    transform: translateX(8%) scaleX(1);
+    opacity: 0.04;
+  }
+}
+@keyframes sunray {
+  0%,
+  100% {
+    opacity: 0.08;
+    transform: rotate(-15deg) scaleX(1);
+  }
+  50% {
+    opacity: 0.14;
+    transform: rotate(-13deg) scaleX(1.08);
+  }
 }
 
-/* ─────────────────────────── FOREST ────────────────────────────── */
-@keyframes moonlight-breath {
-  0%, 100% { opacity: 0.35; }
-  50%       { opacity: 0.70; }
+/* WINTER */
+@keyframes snow-fall {
+  0% {
+    transform: translateX(0) translateY(-20px) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.9;
+  }
+  95% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(var(--snow-drift, 40px)) translateY(105vh) rotate(360deg);
+    opacity: 0;
+  }
 }
-@keyframes moonbeam-sway {
-  0%, 100% { opacity: 0.055; transform: rotate(-9deg); }
-  50%       { opacity: 0.095; transform: rotate(-6.5deg); }
+@keyframes frost-grow {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-@keyframes firefly-wander {
-  0%, 100% { transform: translate(0, 0); }
-  33%       { transform: translate(calc(var(--ff-dx,40px) * 0.6), calc(var(--ff-dy,30px) * 0.8)); }
-  66%       { transform: translate(calc(var(--ff-dx,40px)), calc(var(--ff-dy,30px) * 0.3)); }
+@keyframes ice-sparkle {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.3) rotate(30deg);
+  }
 }
-@keyframes firefly-blink {
-  0%, 100% { opacity: 0.15; transform: scale(0.7); }
-  50%       { opacity: 1;    transform: scale(1.4); }
+@keyframes mist-freeze {
+  from {
+    opacity: 0.2;
+    transform: translateX(-4%);
+  }
+  to {
+    opacity: 0.06;
+    transform: translateX(4%);
+  }
+}
+
+/* AURORA */
+@keyframes aurora-wave {
+  0% {
+    d: path("M -10 50 Q 25 20 50 50 Q 75 80 110 50");
+    opacity: 0.55;
+  }
+  33% {
+    d: path("M -10 40 Q 25 65 50 35 Q 75 15 110 45");
+    opacity: 0.8;
+  }
+  66% {
+    d: path("M -10 60 Q 25 30 50 60 Q 75 90 110 55");
+    opacity: 0.65;
+  }
+  100% {
+    d: path("M -10 50 Q 25 20 50 50 Q 75 80 110 50");
+    opacity: 0.55;
+  }
+}
+@keyframes aurora-shimmer {
+  0%,
+  100% {
+    opacity: 0.45;
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(12px);
+  }
+}
+@keyframes star-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-60px);
+  }
+}
+
+/* FIRE */
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(var(--ember-rise, -120px)) translateX(var(--ember-sway, 20px)) scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes flame-dance {
+  0%,
+  100% {
+    transform: scaleX(1) scaleY(1) rotate(-1deg);
+  }
+  25% {
+    transform: scaleX(0.92) scaleY(1.06) rotate(2deg);
+  }
+  50% {
+    transform: scaleX(1.05) scaleY(0.96) rotate(-2deg);
+  }
+  75% {
+    transform: scaleX(0.96) scaleY(1.04) rotate(1deg);
+  }
+}
+@keyframes lava-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+@keyframes heat-shimmer {
+  0%,
+  100% {
+    filter: blur(0px);
+  }
+  50% {
+    filter: blur(2px);
+  }
+}
+
+/* BAMBOO */
+@keyframes bamboo-sway {
+  0%,
+  100% {
+    transform: rotate(-1.5deg) translateX(0);
+  }
+  50% {
+    transform: rotate(1.5deg) translateX(2px);
+  }
+}
+@keyframes bamboo-leaf {
+  0%,
+  100% {
+    transform: rotate(-8deg) translateY(0);
+  }
+  50% {
+    transform: rotate(8deg) translateY(-4px);
+  }
+}
+@keyframes stream-flow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+@keyframes zen-mist {
+  from {
+    opacity: 0.18;
+    transform: translateX(-6%);
+  }
+  to {
+    opacity: 0.04;
+    transform: translateX(6%);
+  }
+}
+@keyframes bird-fly {
+  from {
+    transform: translateX(-5vw) translateY(0);
+  }
+  to {
+    transform: translateX(110vw) translateY(-20vh);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
    THEME CSS VARIABLES
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Parchment (default) ─────────────────────────────────────────────────── */
+/* -- Parchment (default) -- */
 :root,
 [data-theme="parchment"] {
   --radius: 0.5rem;
-  --background:          oklch(0.965 0.018 85);
-  --foreground:          oklch(0.18 0.012 60);
-  --card:                oklch(0.97 0.014 85);
-  --card-foreground:     oklch(0.18 0.012 60);
-  --popover:             oklch(0.97 0.014 85);
-  --popover-foreground:  oklch(0.18 0.012 60);
-  --primary:             oklch(0.22 0.012 60);
-  --primary-foreground:  oklch(0.965 0.018 85);
-  --secondary:           oklch(0.93 0.02 80);
+  --background: oklch(0.965 0.018 85);
+  --foreground: oklch(0.18 0.012 60);
+  --card: oklch(0.97 0.014 85);
+  --card-foreground: oklch(0.18 0.012 60);
+  --popover: oklch(0.97 0.014 85);
+  --popover-foreground: oklch(0.18 0.012 60);
+  --primary: oklch(0.22 0.012 60);
+  --primary-foreground: oklch(0.965 0.018 85);
+  --secondary: oklch(0.93 0.02 80);
   --secondary-foreground: oklch(0.22 0.012 60);
-  --muted:               oklch(0.92 0.018 80);
-  --muted-foreground:    oklch(0.45 0.025 60);
-  --accent:              oklch(0.7 0.08 65);
-  --accent-foreground:   oklch(0.18 0.012 60);
-  --destructive:         oklch(0.5 0.15 25);
+  --muted: oklch(0.92 0.018 80);
+  --muted-foreground: oklch(0.45 0.025 60);
+  --accent: oklch(0.62 0.1 55);
+  --accent-foreground: oklch(0.18 0.012 60);
+  --destructive: oklch(0.5 0.15 25);
   --destructive-foreground: oklch(0.97 0.01 80);
-  --border:              oklch(0.86 0.018 75);
-  --input:               oklch(0.88 0.018 75);
-  --ring:                oklch(0.55 0.06 70);
+  --border: oklch(0.86 0.018 75);
+  --input: oklch(0.88 0.018 75);
+  --ring: oklch(0.55 0.06 70);
 }
 
-/* ── Midnight ────────────────────────────────────────────────────────────── */
+/* -- Midnight -- */
 [data-theme="midnight"] {
   --radius: 0.5rem;
-  --background:          oklch(0.10 0.022 248);
-  --foreground:          oklch(0.94 0.018 82);
-  --card:                oklch(0.15 0.026 252);
-  --card-foreground:     oklch(0.94 0.018 82);
-  --popover:             oklch(0.15 0.026 252);
-  --popover-foreground:  oklch(0.94 0.018 82);
-  --primary:             oklch(0.72 0.10 68);
-  --primary-foreground:  oklch(0.10 0.022 248);
-  --secondary:           oklch(0.20 0.030 252);
-  --secondary-foreground: oklch(0.94 0.018 82);
-  --muted:               oklch(0.20 0.030 252);
-  --muted-foreground:    oklch(0.72 0.030 70);
-  --accent:              oklch(0.72 0.10 68);
-  --accent-foreground:   oklch(0.10 0.022 248);
-  --destructive:         oklch(0.55 0.18 25);
+  --background: oklch(0.08 0.025 248);
+  --foreground: oklch(0.95 0.015 82);
+  --card: oklch(0.13 0.028 252);
+  --card-foreground: oklch(0.95 0.015 82);
+  --popover: oklch(0.13 0.028 252);
+  --popover-foreground: oklch(0.95 0.015 82);
+  --primary: oklch(0.75 0.12 68);
+  --primary-foreground: oklch(0.08 0.025 248);
+  --secondary: oklch(0.18 0.032 252);
+  --secondary-foreground: oklch(0.95 0.015 82);
+  --muted: oklch(0.18 0.032 252);
+  --muted-foreground: oklch(0.68 0.035 70);
+  --accent: oklch(0.72 0.13 58);
+  --accent-foreground: oklch(0.08 0.025 248);
+  --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(0.95 0.01 80);
-  --border:              oklch(0.24 0.030 252);
-  --input:               oklch(0.24 0.030 252);
-  --ring:                oklch(0.60 0.08 68);
+  --border: oklch(0.22 0.032 252);
+  --input: oklch(0.22 0.032 252);
+  --ring: oklch(0.6 0.09 65);
 }
 
-/* ── Liquid ──────────────────────────────────────────────────────────────── */
+/* -- Liquid / Rain -- */
 [data-theme="liquid"] {
   --radius: 0.75rem;
-  --background:          oklch(0.12 0.04 268);
-  --foreground:          oklch(0.93 0.025 258);
-  --card:                oklch(0.17 0.045 265);
-  --card-foreground:     oklch(0.93 0.025 258);
-  --popover:             oklch(0.17 0.045 265);
-  --popover-foreground:  oklch(0.93 0.025 258);
-  --primary:             oklch(0.72 0.17 192);
-  --primary-foreground:  oklch(0.12 0.04 268);
-  --secondary:           oklch(0.22 0.05 262);
-  --secondary-foreground: oklch(0.93 0.025 258);
-  --muted:               oklch(0.22 0.05 262);
-  --muted-foreground:    oklch(0.74 0.035 250);
-  --accent:              oklch(0.72 0.17 192);
-  --accent-foreground:   oklch(0.12 0.04 268);
-  --destructive:         oklch(0.60 0.20 20);
+  --background: oklch(0.1 0.042 268);
+  --foreground: oklch(0.94 0.022 258);
+  --card: oklch(0.15 0.048 265);
+  --card-foreground: oklch(0.94 0.022 258);
+  --popover: oklch(0.15 0.048 265);
+  --popover-foreground: oklch(0.94 0.022 258);
+  --primary: oklch(0.74 0.18 192);
+  --primary-foreground: oklch(0.1 0.042 268);
+  --secondary: oklch(0.2 0.055 262);
+  --secondary-foreground: oklch(0.94 0.022 258);
+  --muted: oklch(0.2 0.055 262);
+  --muted-foreground: oklch(0.72 0.038 250);
+  --accent: oklch(0.74 0.18 192);
+  --accent-foreground: oklch(0.1 0.042 268);
+  --destructive: oklch(0.6 0.2 20);
   --destructive-foreground: oklch(0.95 0.01 80);
-  --border:              oklch(0.28 0.05 262);
-  --input:               oklch(0.28 0.05 262);
-  --ring:                oklch(0.60 0.12 200);
+  --border: oklch(0.26 0.055 262);
+  --input: oklch(0.26 0.055 262);
+  --ring: oklch(0.62 0.13 200);
 }
 
-/* ── Flower ──────────────────────────────────────────────────────────────── */
+/* -- Flower Garden -- */
 [data-theme="flower"] {
   --radius: 1.25rem;
-  --background:          oklch(0.978 0.012 62);
-  --foreground:          oklch(0.2 0.038 30);
-  --card:                oklch(0.985 0.008 62);
-  --card-foreground:     oklch(0.2 0.038 30);
-  --popover:             oklch(0.985 0.008 62);
-  --popover-foreground:  oklch(0.2 0.038 30);
-  --primary:             oklch(0.36 0.11 8);
-  --primary-foreground:  oklch(0.978 0.012 62);
-  --secondary:           oklch(0.94 0.022 20);
+  --background: oklch(0.98 0.01 62);
+  --foreground: oklch(0.2 0.038 30);
+  --card: oklch(0.986 0.006 62);
+  --card-foreground: oklch(0.2 0.038 30);
+  --popover: oklch(0.986 0.006 62);
+  --popover-foreground: oklch(0.2 0.038 30);
+  --primary: oklch(0.38 0.12 8);
+  --primary-foreground: oklch(0.98 0.01 62);
+  --secondary: oklch(0.94 0.022 20);
   --secondary-foreground: oklch(0.2 0.038 30);
-  --muted:               oklch(0.93 0.022 30);
-  --muted-foreground:    oklch(0.5 0.045 25);
-  --accent:              oklch(0.6 0.17 6);
-  --accent-foreground:   oklch(0.978 0.012 62);
-  --destructive:         oklch(0.5 0.18 25);
+  --muted: oklch(0.93 0.022 30);
+  --muted-foreground: oklch(0.5 0.045 25);
+  --accent: oklch(0.62 0.18 6);
+  --accent-foreground: oklch(0.98 0.01 62);
+  --destructive: oklch(0.5 0.18 25);
   --destructive-foreground: oklch(0.97 0.01 80);
-  --border:              oklch(0.88 0.025 25);
-  --input:               oklch(0.9 0.022 25);
-  --ring:                oklch(0.6 0.12 8);
+  --border: oklch(0.88 0.025 25);
+  --input: oklch(0.9 0.022 25);
+  --ring: oklch(0.62 0.12 8);
 }
 
-/* ── Retro ───────────────────────────────────────────────────────────────── */
-[data-theme="retro"] {
-  --radius: 0rem;
-  --background:          oklch(0.15 0.055 258);
-  --foreground:          oklch(0.99 0.004 0);
-  --card:                oklch(0.19 0.06 258);
-  --card-foreground:     oklch(0.99 0.004 0);
-  --popover:             oklch(0.19 0.06 258);
-  --popover-foreground:  oklch(0.99 0.004 0);
-  --primary:             oklch(0.62 0.24 25);
-  --primary-foreground:  oklch(0.99 0.004 0);
-  --secondary:           oklch(0.24 0.07 258);
-  --secondary-foreground: oklch(0.99 0.004 0);
-  --muted:               oklch(0.24 0.07 258);
-  --muted-foreground:    oklch(0.80 0.04 240);
-  --accent:              oklch(0.82 0.18 96);
-  --accent-foreground:   oklch(0.15 0.055 258);
-  --destructive:         oklch(0.62 0.24 25);
-  --destructive-foreground: oklch(0.99 0.004 0);
-  --border:              oklch(0.30 0.08 258);
-  --input:               oklch(0.30 0.08 258);
-  --ring:                oklch(0.82 0.18 96);
-}
-
-/* ── Forest ──────────────────────────────────────────────────────────────── */
-[data-theme="forest"] {
+/* -- Autumn -- */
+[data-theme="autumn"] {
   --radius: 0.5rem;
-  --background:          oklch(0.11 0.03 155);
-  --foreground:          oklch(0.92 0.022 143);
-  --card:                oklch(0.15 0.035 152);
-  --card-foreground:     oklch(0.92 0.022 143);
-  --popover:             oklch(0.15 0.035 152);
-  --popover-foreground:  oklch(0.92 0.022 143);
-  --primary:             oklch(0.66 0.16 143);
-  --primary-foreground:  oklch(0.11 0.03 155);
-  --secondary:           oklch(0.20 0.035 150);
-  --secondary-foreground: oklch(0.92 0.022 143);
-  --muted:               oklch(0.20 0.035 150);
-  --muted-foreground:    oklch(0.74 0.04 143);
-  --accent:              oklch(0.66 0.16 143);
-  --accent-foreground:   oklch(0.11 0.03 155);
-  --destructive:         oklch(0.55 0.18 25);
+  --background: oklch(0.945 0.028 75);
+  --foreground: oklch(0.18 0.045 38);
+  --card: oklch(0.955 0.022 74);
+  --card-foreground: oklch(0.18 0.045 38);
+  --popover: oklch(0.955 0.022 74);
+  --popover-foreground: oklch(0.18 0.045 38);
+  --primary: oklch(0.3 0.06 38);
+  --primary-foreground: oklch(0.945 0.028 75);
+  --secondary: oklch(0.9 0.04 72);
+  --secondary-foreground: oklch(0.18 0.045 38);
+  --muted: oklch(0.88 0.035 70);
+  --muted-foreground: oklch(0.45 0.05 42);
+  --accent: oklch(0.58 0.2 38);
+  --accent-foreground: oklch(0.945 0.028 75);
+  --destructive: oklch(0.5 0.18 25);
+  --destructive-foreground: oklch(0.97 0.01 80);
+  --border: oklch(0.8 0.042 68);
+  --input: oklch(0.82 0.04 70);
+  --ring: oklch(0.55 0.15 40);
+}
+
+/* -- Winter -- */
+[data-theme="winter"] {
+  --radius: 0.75rem;
+  --background: oklch(0.965 0.015 222);
+  --foreground: oklch(0.15 0.035 232);
+  --card: oklch(0.975 0.01 218);
+  --card-foreground: oklch(0.15 0.035 232);
+  --popover: oklch(0.975 0.01 218);
+  --popover-foreground: oklch(0.15 0.035 232);
+  --primary: oklch(0.35 0.12 235);
+  --primary-foreground: oklch(0.965 0.015 222);
+  --secondary: oklch(0.92 0.02 220);
+  --secondary-foreground: oklch(0.15 0.035 232);
+  --muted: oklch(0.91 0.018 218);
+  --muted-foreground: oklch(0.5 0.04 228);
+  --accent: oklch(0.55 0.18 210);
+  --accent-foreground: oklch(0.965 0.015 222);
+  --destructive: oklch(0.5 0.16 25);
+  --destructive-foreground: oklch(0.97 0.01 80);
+  --border: oklch(0.83 0.025 218);
+  --input: oklch(0.86 0.022 220);
+  --ring: oklch(0.55 0.14 215);
+}
+
+/* -- Aurora -- */
+[data-theme="aurora"] {
+  --radius: 0.75rem;
+  --background: oklch(0.06 0.035 265);
+  --foreground: oklch(0.94 0.022 148);
+  --card: oklch(0.1 0.04 268);
+  --card-foreground: oklch(0.94 0.022 148);
+  --popover: oklch(0.1 0.04 268);
+  --popover-foreground: oklch(0.94 0.022 148);
+  --primary: oklch(0.62 0.2 155);
+  --primary-foreground: oklch(0.06 0.035 265);
+  --secondary: oklch(0.14 0.042 268);
+  --secondary-foreground: oklch(0.94 0.022 148);
+  --muted: oklch(0.14 0.042 268);
+  --muted-foreground: oklch(0.65 0.055 175);
+  --accent: oklch(0.65 0.22 300);
+  --accent-foreground: oklch(0.06 0.035 265);
+  --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(0.95 0.01 80);
-  --border:              oklch(0.25 0.04 148);
-  --input:               oklch(0.25 0.04 148);
-  --ring:                oklch(0.55 0.10 145);
+  --border: oklch(0.22 0.048 268);
+  --input: oklch(0.22 0.048 268);
+  --ring: oklch(0.55 0.15 155);
+}
+
+/* -- Fire -- */
+[data-theme="fire"] {
+  --radius: 0.5rem;
+  --background: oklch(0.07 0.025 28);
+  --foreground: oklch(0.95 0.025 55);
+  --card: oklch(0.11 0.038 28);
+  --card-foreground: oklch(0.95 0.025 55);
+  --popover: oklch(0.11 0.038 28);
+  --popover-foreground: oklch(0.95 0.025 55);
+  --primary: oklch(0.58 0.22 38);
+  --primary-foreground: oklch(0.07 0.025 28);
+  --secondary: oklch(0.16 0.045 28);
+  --secondary-foreground: oklch(0.95 0.025 55);
+  --muted: oklch(0.16 0.045 28);
+  --muted-foreground: oklch(0.65 0.06 50);
+  --accent: oklch(0.68 0.26 48);
+  --accent-foreground: oklch(0.07 0.025 28);
+  --destructive: oklch(0.6 0.22 22);
+  --destructive-foreground: oklch(0.95 0.01 80);
+  --border: oklch(0.22 0.055 30);
+  --input: oklch(0.22 0.055 30);
+  --ring: oklch(0.62 0.2 42);
+}
+
+/* -- Bamboo / Zen -- */
+[data-theme="bamboo"] {
+  --radius: 0.5rem;
+  --background: oklch(0.96 0.025 122);
+  --foreground: oklch(0.18 0.06 138);
+  --card: oklch(0.968 0.018 124);
+  --card-foreground: oklch(0.18 0.06 138);
+  --popover: oklch(0.968 0.018 124);
+  --popover-foreground: oklch(0.18 0.06 138);
+  --primary: oklch(0.28 0.08 138);
+  --primary-foreground: oklch(0.96 0.025 122);
+  --secondary: oklch(0.91 0.032 128);
+  --secondary-foreground: oklch(0.18 0.06 138);
+  --muted: oklch(0.9 0.028 125);
+  --muted-foreground: oklch(0.46 0.055 132);
+  --accent: oklch(0.5 0.16 138);
+  --accent-foreground: oklch(0.96 0.025 122);
+  --destructive: oklch(0.5 0.16 25);
+  --destructive-foreground: oklch(0.97 0.01 80);
+  --border: oklch(0.8 0.04 130);
+  --input: oklch(0.82 0.035 128);
+  --ring: oklch(0.52 0.14 138);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
    BASE STYLES
    ══════════════════════════════════════════════════════════════════════════ */
 @layer base {
-  * { border-color: var(--color-border); }
-  html {
-    transition: background-color 0.55s ease, color 0.35s ease;
+  * {
+    border-color: var(--color-border);
   }
-  html, body {
+  html {
+    transition:
+      background-color 0.65s ease,
+      color 0.4s ease;
+  }
+  html,
+  body {
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
@@ -396,57 +933,66 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, .font-serif {
+  h1,
+  h2,
+  h3,
+  .font-serif {
     font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.01em;
   }
 }
 
-/* ── Retro pixel-font override ─────────────────────────────────────────── */
-[data-theme="retro"] .font-serif,
-[data-theme="retro"] h1,
-[data-theme="retro"] h2,
-[data-theme="retro"] h3 {
-  font-family: "Press Start 2P", monospace;
-  font-size: 0.7em;
-  line-height: 1.8;
-  letter-spacing: 0;
-  text-shadow: 2px 2px 0 #000;
-}
-
-/* ── Glassmorphism cards for dark immersive themes ─────────────────────── */
+/* -- Glassmorphism cards for dark immersive themes -- */
 [data-theme="midnight"] .bg-card {
-  background-color: oklch(0.15 0.026 252 / 0.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background-color: oklch(0.13 0.028 252 / 0.7);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
 [data-theme="midnight"] .bg-card\/40,
 [data-theme="midnight"] .bg-background\/40 {
-  background-color: oklch(0.10 0.022 248 / 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-[data-theme="liquid"] .bg-card {
-  background-color: oklch(0.17 0.045 265 / 0.68);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-[data-theme="liquid"] .bg-card\/40,
-[data-theme="liquid"] .bg-background\/40 {
-  background-color: oklch(0.12 0.04 268 / 0.50);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-[data-theme="forest"] .bg-card {
-  background-color: oklch(0.15 0.035 152 / 0.75);
+  background-color: oklch(0.08 0.025 248 / 0.5);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* ── Reduced motion ────────────────────────────────────────────────────── */
+[data-theme="liquid"] .bg-card {
+  background-color: oklch(0.15 0.048 265 / 0.65);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+}
+[data-theme="liquid"] .bg-card\/40,
+[data-theme="liquid"] .bg-background\/40 {
+  background-color: oklch(0.1 0.042 268 / 0.48);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-theme="aurora"] .bg-card {
+  background-color: oklch(0.1 0.04 268 / 0.72);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+}
+[data-theme="aurora"] .bg-card\/40,
+[data-theme="aurora"] .bg-background\/40 {
+  background-color: oklch(0.06 0.035 265 / 0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+[data-theme="fire"] .bg-card {
+  background-color: oklch(0.11 0.038 28 / 0.75);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+}
+
+[data-theme="winter"] .bg-card {
+  background-color: oklch(0.975 0.01 218 / 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* -- Reduced motion -- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -23,7 +23,11 @@ interface Gift {
   created_at: string;
   read_at: string | null;
 }
-interface Profile { id: string; display_name: string; avatar_url: string | null; }
+interface Profile {
+  id: string;
+  display_name: string;
+  avatar_url: string | null;
+}
 
 function GiftDetailPage() {
   const { user } = Route.useRouteContext();
@@ -40,11 +44,17 @@ function GiftDetailPage() {
   useEffect(() => {
     (async () => {
       const { data } = await supabase.from("gifts").select("*").eq("id", id).maybeSingle();
-      if (!data) { setNotFound(true); return; }
+      if (!data) {
+        setNotFound(true);
+        return;
+      }
       const g = data as Gift;
       setGift(g);
       const otherIds = Array.from(new Set([g.sender_id, g.recipient_id]));
-      const { data: profs } = await supabase.from("profiles").select("id,display_name,avatar_url").in("id", otherIds);
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id,display_name,avatar_url")
+        .in("id", otherIds);
       (profs ?? []).forEach((p) => {
         if (p.id === g.sender_id) setSender(p as Profile);
         if (p.id === g.recipient_id) setRecipient(p as Profile);
@@ -68,31 +78,40 @@ function GiftDetailPage() {
     if (!gift) return;
     if (!confirm("Delete this gift?")) return;
     await supabase.from("gifts").delete().eq("id", gift.id);
-    navigate({ to: "/sent" });
+    navigate({ to: mine ? "/sent" : "/" });
   }
 
   if (notFound) {
     return (
       <div className="mx-auto max-w-md px-6 pt-12 text-center">
         <p className="font-serif text-xl text-foreground">Song not found.</p>
-        <p className="mt-2 text-sm text-muted-foreground italic">It may have been deleted or you don't have access.</p>
-        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent">← inbox</Link>
+        <p className="mt-2 text-sm text-muted-foreground italic">
+          It may have been deleted or you don't have access.
+        </p>
+        <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent">
+          ← inbox
+        </Link>
       </div>
     );
   }
 
   if (!gift) {
-    return <div className="mx-auto max-w-md px-6 pt-12 text-sm text-muted-foreground">Loading…</div>;
+    return (
+      <div className="mx-auto max-w-md px-6 pt-12 text-sm text-muted-foreground">Loading…</div>
+    );
   }
 
   const mine = gift.sender_id === user.id;
-  const fromName = mine ? "You" : sender?.display_name ?? "A friend";
-  const toName = mine ? recipient?.display_name ?? "your friend" : "you";
+  const fromName = mine ? "You" : (sender?.display_name ?? "A friend");
+  const toName = mine ? (recipient?.display_name ?? "your friend") : "you";
 
   if (!opened) {
     return (
       <div className="mx-auto max-w-md px-6 pt-16 text-center">
-        <Link to="/" className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground">
+        <Link
+          to="/"
+          className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"
+        >
           ← inbox
         </Link>
         <div className="mt-14 [perspective:900px]">
@@ -137,7 +156,10 @@ function GiftDetailPage() {
 
   return (
     <div className="mx-auto max-w-md px-6 pt-10 animate-gift-reveal">
-      <Link to={mine ? "/sent" : "/"} className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground">
+      <Link
+        to={mine ? "/sent" : "/"}
+        className="text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"
+      >
         ← back
       </Link>
 
@@ -149,7 +171,11 @@ function GiftDetailPage() {
       </header>
 
       {gift.artwork_url && (
-        <img src={gift.artwork_url} alt="" className="mx-auto mb-8 h-56 w-56 rounded-sm shadow-md" />
+        <img
+          src={gift.artwork_url}
+          alt=""
+          className="mx-auto mb-8 h-56 w-56 rounded-sm shadow-md"
+        />
       )}
 
       <div className="text-center mb-8">
@@ -159,7 +185,7 @@ function GiftDetailPage() {
 
       {gift.note && (
         <blockquote className="mb-10 border-l-2 border-accent pl-5 font-serif italic text-lg text-foreground/85">
-          "{gift.note}"
+          {`"${gift.note}"`}
           <footer className="mt-2 text-xs not-italic uppercase tracking-[0.18em] text-muted-foreground">
             — {sender?.display_name ?? "them"}
           </footer>
@@ -168,7 +194,10 @@ function GiftDetailPage() {
 
       {gift.youtube_video_id ? (
         <div className="mb-10">
-          <div className="relative w-full overflow-hidden rounded-md border border-border bg-black" style={{ paddingTop: "56.25%" }}>
+          <div
+            className="relative w-full overflow-hidden rounded-md border border-border bg-black"
+            style={{ paddingTop: "56.25%" }}
+          >
             <iframe
               className="absolute inset-0 h-full w-full"
               src={`https://www.youtube.com/embed/${gift.youtube_video_id}?rel=0`}
@@ -180,10 +209,13 @@ function GiftDetailPage() {
         </div>
       ) : (
         <div className="mb-10 rounded-md border border-dashed border-border p-5 text-center">
-          <p className="text-sm italic text-muted-foreground">No video was attached to this song.</p>
+          <p className="text-sm italic text-muted-foreground">
+            No video was attached to this song.
+          </p>
           <a
             href={youtubeSearchUrl(gift.track_name, gift.artist_name)}
-            target="_blank" rel="noreferrer"
+            target="_blank"
+            rel="noreferrer"
             className="mt-3 inline-block text-xs uppercase tracking-[0.18em] text-accent"
           >
             Find it on YouTube ↗
@@ -192,7 +224,10 @@ function GiftDetailPage() {
       )}
 
       {mine && (
-        <button onClick={deleteGift} className="mt-4 w-full text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-destructive">
+        <button
+          onClick={deleteGift}
+          className="mt-4 w-full text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-destructive"
+        >
           delete this gift
         </button>
       )}

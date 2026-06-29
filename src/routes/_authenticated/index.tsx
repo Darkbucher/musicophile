@@ -18,7 +18,11 @@ interface Gift {
   created_at: string;
   read_at: string | null;
 }
-interface Profile { id: string; display_name: string; avatar_url: string | null; }
+interface Profile {
+  id: string;
+  display_name: string;
+  avatar_url: string | null;
+}
 
 function InboxPage() {
   const { user } = Route.useRouteContext();
@@ -29,16 +33,23 @@ function InboxPage() {
   async function load() {
     const { data } = await supabase
       .from("gifts")
-      .select("id,sender_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at")
+      .select(
+        "id,sender_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at",
+      )
       .eq("recipient_id", user.id)
       .order("created_at", { ascending: false });
     const list = (data as Gift[] | null) ?? [];
     setGifts(list);
     const ids = Array.from(new Set(list.map((g) => g.sender_id)));
     if (ids.length) {
-      const { data: profs } = await supabase.from("profiles").select("id,display_name,avatar_url").in("id", ids);
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id,display_name,avatar_url")
+        .in("id", ids);
       const map: Record<string, Profile> = {};
-      (profs ?? []).forEach((p) => { map[p.id] = p as Profile; });
+      (profs ?? []).forEach((p) => {
+        map[p.id] = p as Profile;
+      });
       setProfiles(map);
     }
     setLoading(false);
@@ -46,20 +57,27 @@ function InboxPage() {
 
   useEffect(() => {
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const ch = supabase
       .channel(`inbox-${user.id}`)
-      .on("postgres_changes",
+      .on(
+        "postgres_changes",
         { event: "INSERT", schema: "public", table: "gifts", filter: `recipient_id=eq.${user.id}` },
-        () => load())
+        () => load(),
+      )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [user.id]);
 
   return (
     <div className="mx-auto max-w-md px-6 pt-12">
       <header className="mb-10">
         <h1 className="font-serif text-4xl">Inbox</h1>
-        <p className="mt-2 text-sm italic text-muted-foreground">Songs sent to you, like letters.</p>
+        <p className="mt-2 text-sm italic text-muted-foreground">
+          Songs sent to you, like letters.
+        </p>
       </header>
 
       {loading ? (
@@ -67,8 +85,13 @@ function InboxPage() {
       ) : gifts.length === 0 ? (
         <div className="rounded-md border border-dashed border-border px-6 py-12 text-center">
           <p className="font-serif text-xl text-foreground">No songs yet.</p>
-          <p className="mt-2 text-sm text-muted-foreground italic">When a friend sends you one, it'll land here.</p>
-          <Link to="/friends" className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent">
+          <p className="mt-2 text-sm text-muted-foreground italic">
+            When a friend sends you one, it'll land here.
+          </p>
+          <Link
+            to="/friends"
+            className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent"
+          >
             Find a friend
           </Link>
         </div>
@@ -86,10 +109,16 @@ function InboxPage() {
                 >
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                      from <span className="text-foreground">{sender?.display_name ?? "a friend"}</span>
+                      from{" "}
+                      <span className="text-foreground">{sender?.display_name ?? "a friend"}</span>
                     </p>
                     <div className="flex items-center gap-2 shrink-0">
-                      {unread && <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-label="unread" />}
+                      {unread && (
+                        <span
+                          className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
+                          aria-label="unread"
+                        />
+                      )}
                       <span className="text-xs text-muted-foreground">{timeAgo(g.created_at)}</span>
                     </div>
                   </div>
@@ -104,7 +133,7 @@ function InboxPage() {
                   </div>
                   {g.note && (
                     <p className="mt-4 border-t border-border pt-3 font-serif italic text-foreground/80">
-                      "{g.note}"
+                      {`"${g.note}"`}
                     </p>
                   )}
                 </Link>

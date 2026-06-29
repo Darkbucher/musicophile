@@ -19,6 +19,7 @@ function AuthPage() {
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,7 +27,7 @@ function AuthPage() {
     setLoading(true);
     try {
       if (mode === "sign-up") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -35,6 +36,12 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        // If identities is empty, email confirmation is required before the
+        // user is fully signed in — show a prompt instead of navigating.
+        if (!data.session) {
+          setEmailSent(true);
+          return;
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -45,6 +52,28 @@ function AuthPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6 bg-background">
+        <div className="w-full max-w-sm text-center">
+          <h1 className="font-serif text-5xl text-foreground">Musicophile</h1>
+          <p className="mt-8 font-serif text-xl text-foreground">Check your inbox.</p>
+          <p className="mt-3 text-sm text-muted-foreground italic">
+            We sent a confirmation link to <span className="text-foreground">{email}</span>. Click
+            it to finish creating your account.
+          </p>
+          <button
+            type="button"
+            className="mt-8 text-xs uppercase tracking-[0.18em] text-accent"
+            onClick={() => setEmailSent(false)}
+          >
+            Back to sign in
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

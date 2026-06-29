@@ -18,7 +18,11 @@ async function ytSearch(query: string, apiKey: string): Promise<YouTubeSearchRes
   const data = (await res.json()) as {
     items?: Array<{
       id?: { videoId?: string };
-      snippet?: { title?: string; channelTitle?: string; thumbnails?: { medium?: { url?: string }; default?: { url?: string } } };
+      snippet?: {
+        title?: string;
+        channelTitle?: string;
+        thumbnails?: { medium?: { url?: string }; default?: { url?: string } };
+      };
     }>;
   };
   const item = data.items?.[0];
