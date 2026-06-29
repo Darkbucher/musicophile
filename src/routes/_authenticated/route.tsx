@@ -58,7 +58,7 @@ function BottomNav({ unread }: { unread: number }) {
     "relative px-4 py-2 text-xs uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground";
   const active = "text-foreground";
   return (
-    <nav className="fixed bottom-0 inset-x-0 border-t border-border bg-background/85 backdrop-blur-md">
+    <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-md items-center justify-around py-3">
         <Link
           to="/"
