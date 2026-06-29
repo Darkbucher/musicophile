@@ -45,7 +45,7 @@ function AuthenticatedLayout() {
   return (
     <div className="relative min-h-screen text-foreground">
       <ThemeBackground />
-      <main className="pb-24">
+      <main className="relative z-10 pb-24">
         <Outlet />
       </main>
       <BottomNav unread={unread} />
