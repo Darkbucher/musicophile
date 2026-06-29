@@ -184,7 +184,7 @@ function GiftDetailPage() {
       </div>
 
       {gift.note && (
-        <blockquote className="mb-10 border-l-2 border-accent pl-5 font-serif italic text-lg text-foreground/85">
+        <blockquote className="mb-10 border-l-2 border-accent pl-5 font-handwriting text-3xl text-foreground/90">
           {`"${gift.note}"`}
           <footer className="mt-2 text-xs not-italic uppercase tracking-[0.18em] text-muted-foreground">
             — {sender?.display_name ?? "them"}

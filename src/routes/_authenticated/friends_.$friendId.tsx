@@ -36,6 +36,8 @@ function FriendThreadPage() {
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [composerOpen, setComposerOpen] = useState(false);
+  const [friendshipId, setFriendshipId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   async function load() {
     const { data: prof } = await supabase
@@ -46,12 +48,13 @@ function FriendThreadPage() {
     setFriend(prof as Profile | null);
     const { data: fs } = await supabase
       .from("friendships")
-      .select("status")
+      .select("id, status")
       .or(
         `and(requester_id.eq.${user.id},addressee_id.eq.${friendId}),and(requester_id.eq.${friendId},addressee_id.eq.${user.id})`,
       )
       .maybeSingle();
     setAllowed(fs?.status === "accepted");
+    setFriendshipId(fs?.id ?? null);
 
     const { data } = await supabase
       .from("gifts")
@@ -63,6 +66,13 @@ function FriendThreadPage() {
       )
       .order("created_at", { ascending: false });
     setGifts((data as Gift[] | null) ?? []);
+  }
+
+  async function unfriend() {
+    if (!friendshipId) return;
+    if (!confirm(`Are you sure you want to unfriend ${friend?.display_name}?`)) return;
+    await supabase.from("friendships").delete().eq("id", friendshipId);
+    navigate({ to: "/friends" });
   }
 
   useEffect(() => {
@@ -98,14 +108,26 @@ function FriendThreadPage() {
         ← friends
       </Link>
 
-      <header className="mt-6 mb-8">
-        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Between you and</p>
-        <h1 className="font-serif text-4xl mt-1">{friend?.display_name ?? "…"}</h1>
-        <p className="mt-2 text-sm italic text-muted-foreground">
-          {gifts.length === 0
-            ? "No songs yet."
-            : `${gifts.length} song${gifts.length === 1 ? "" : "s"} shared.`}
-        </p>
+      <header className="mt-6 mb-8 flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+            Between you and
+          </p>
+          <h1 className="font-serif text-4xl mt-1 truncate">{friend?.display_name ?? "…"}</h1>
+          <p className="mt-2 text-sm italic text-muted-foreground">
+            {gifts.length === 0
+              ? "No songs yet."
+              : `${gifts.length} song${gifts.length === 1 ? "" : "s"} shared.`}
+          </p>
+        </div>
+        {friendshipId && (
+          <button
+            onClick={unfriend}
+            className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-muted-foreground hover:text-destructive transition-colors mt-2"
+          >
+            Unfriend
+          </button>
+        )}
       </header>
 
       {allowed && (
@@ -499,7 +521,7 @@ function Composer({
               maxLength={200}
               rows={3}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent mb-1 font-serif italic"
+              className="w-full rounded-md border border-border bg-background px-3 py-2 text-2xl leading-tight outline-none focus:border-accent mb-1 font-handwriting"
             />
             <p className="mb-5 text-right text-xs text-muted-foreground">{note.length}/200</p>
 

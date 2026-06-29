@@ -1,0 +1,17 @@
+{
+  "name": "Musicophile",
+  "short_name": "Musicophile",
+  "description": "Send songs to friends like letters. One song, one note, one friend.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#0d0f14",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
