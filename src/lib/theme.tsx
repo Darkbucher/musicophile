@@ -3,12 +3,12 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 export type Theme = "parchment" | "midnight" | "liquid" | "flower" | "retro" | "forest";
 
 export const THEMES: { id: Theme; label: string; emoji: string; blurb: string }[] = [
-  { id: "parchment", label: "Parchment", emoji: "🟤", blurb: "A paper letter under a warm lamp." },
-  { id: "midnight", label: "Midnight", emoji: "🌑", blurb: "Candlelight, late-night listening." },
-  { id: "liquid", label: "Liquid", emoji: "🌊", blurb: "Deep water, slow electronics." },
-  { id: "flower", label: "Flower", emoji: "🌸", blurb: "Spring garden, handwritten." },
-  { id: "retro", label: "Retro", emoji: "👾", blurb: "Arcade glow, chiptune nights." },
-  { id: "forest", label: "Forest", emoji: "🌲", blurb: "Moonlight through the canopy." },
+  { id: "parchment", label: "Parchment", emoji: "📜", blurb: "Aged manuscript, dust motes, warm candlelight." },
+  { id: "midnight", label: "Midnight", emoji: "🌙", blurb: "Cosmic night — stars, moon, shooting meteors." },
+  { id: "liquid",   label: "Liquid",   emoji: "🌧️", blurb: "Rainfall, deep water, ripples on click." },
+  { id: "flower",   label: "Flower",   emoji: "🌸", blurb: "Falling petals, pollen, blooming garden." },
+  { id: "retro",    label: "Retro",    emoji: "👾", blurb: "Arcade grid, CRT scanlines, neon glow." },
+  { id: "forest",   label: "Forest",   emoji: "🌲", blurb: "Fireflies, moonbeams, ancient canopy." },
 ];
 
 const STORAGE_KEY = "musicophile-theme";

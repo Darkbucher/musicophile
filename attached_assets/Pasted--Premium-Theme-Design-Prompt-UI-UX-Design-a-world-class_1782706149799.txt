@@ -1,0 +1,313 @@
+# Premium Theme Design Prompt (UI/UX)
+
+Design a **world-class, premium, immersive theme system** instead of just changing colors. Every theme should completely transform the application's atmosphere using **animated backgrounds, textures, particles, lighting, depth, smooth transitions, and subtle interactive effects.** The experience should feel alive without affecting readability or performance.
+
+### Global Design Rules
+
+* Every theme must have:
+
+  * Beautiful animated background
+  * Smooth 60fps animations
+  * Soft glassmorphism where appropriate
+  * Elegant shadows and depth
+  * Theme-specific icons and accents
+  * High readability and accessibility
+  * Smooth transitions when switching themes
+  * Premium micro-interactions
+  * Parallax background movement
+  * Subtle ambient particles
+  * Dynamic lighting
+  * Responsive across desktop and mobile
+
+---
+
+# 📜 Parchment Theme (Ancient Manuscript)
+
+Create the feeling of opening a centuries-old handwritten book.
+
+Background:
+
+* Authentic aged parchment texture
+* Warm ivory, beige and sepia colors
+* Burnt paper edges
+* Ink stains
+* Watermarks
+* Fold marks
+* Paper fibers
+* Slight wrinkles
+
+Animations:
+
+* Floating dust particles
+* Tiny drifting paper fibers
+* Soft candle-light flicker
+* Slow moving shadows
+* Slight page texture movement
+
+UI:
+
+* Vintage serif typography
+* Ink-colored buttons
+* Wax-seal style accents
+* Antique borders
+* Feather pen inspired icons
+
+Mood:
+Warm, historical, magical, scholarly.
+
+---
+
+# 🌙 Midnight Theme (Cosmic Night)
+
+Transform the interface into a peaceful midnight sky.
+
+Background:
+
+* Deep navy to black gradient
+* Thousands of tiny stars
+* Random blinking stars
+* Shooting stars every 15–30 seconds
+* Large glowing moon
+* Thin moving clouds
+* Soft galaxy glow
+* Nebula effects
+
+Animations:
+
+* Twinkling stars
+* Moon glow breathing animation
+* Slow cloud movement
+* Meteor showers
+* Floating cosmic dust
+
+UI:
+
+* Glass panels
+* Blue glow
+* White typography
+* Soft neon borders
+* Minimalist icons
+
+Mood:
+Calm, dreamy, premium, futuristic.
+
+---
+
+# 🌧 Liquid / Rain Theme
+
+The interface should feel surrounded by water.
+
+Background:
+
+* Flowing water texture
+* Rainfall animation
+* Water ripples
+* Splash effects
+* Mist
+* Reflection highlights
+
+Animations:
+
+* Falling rain
+* Ripple propagation
+* Water droplets sliding
+* Occasional lightning (optional)
+* Moving liquid waves
+
+Interactive Effects:
+
+* Mouse creates ripples
+* Buttons create splash animation
+* Cards reflect light
+* Hover creates water distortion
+
+Colors:
+Ocean blue
+Turquoise
+Cyan
+Crystal white
+
+Mood:
+Refreshing, relaxing, immersive.
+
+---
+
+# 🌸 Flower Garden Theme
+
+Create a peaceful blooming garden.
+
+Background:
+
+* Soft floral landscape
+* Flower fields
+* Cherry blossom trees
+* Lavender
+* Roses
+* Wild flowers
+
+Animations:
+
+* Falling flower petals
+* Butterflies
+* Bees
+* Floating pollen particles
+* Gentle breeze
+* Grass swaying
+
+Interactive:
+
+* Flowers bloom on hover
+* Petals follow cursor
+* Soft wind animation
+
+Colors:
+Pink
+Lavender
+Cream
+Green
+Peach
+
+Mood:
+Elegant, peaceful, natural.
+
+---
+
+# 🍂 Autumn Theme
+
+Background:
+
+* Forest with orange leaves
+* Falling maple leaves
+* Warm sunlight
+* Soft fog
+
+Animations:
+
+* Leaves drifting
+* Wind movement
+* Floating dust
+
+Colors:
+Orange
+Amber
+Brown
+Gold
+
+Mood:
+Cozy and nostalgic.
+
+---
+
+# ❄ Winter Theme
+
+Background:
+
+* Snow landscape
+* Frost texture
+* Ice crystals
+
+Animations:
+
+* Falling snow
+* Snow accumulation
+* Cold mist
+* Sparkling ice
+
+Colors:
+White
+Ice blue
+Silver
+
+Mood:
+Peaceful and magical.
+
+---
+
+# 🌌 Aurora Theme
+
+Background:
+
+* Northern Lights
+* Mountains silhouette
+* Night sky
+
+Animations:
+
+* Flowing aurora ribbons
+* Stars
+* Floating particles
+
+Colors:
+Green
+Purple
+Blue
+
+Mood:
+Mystical and premium.
+
+---
+
+# 🔥 Fire Theme
+
+Background:
+
+* Dark volcanic landscape
+* Ember particles
+* Flowing lava cracks
+
+Animations:
+
+* Fire sparks
+* Flickering flames
+* Heat distortion
+
+Colors:
+Orange
+Red
+Gold
+
+Mood:
+Powerful and energetic.
+
+---
+
+# 🎋 Bamboo & Zen Theme
+
+Background:
+
+* Bamboo forest
+* Mist
+* Flowing stream
+* Smooth stones
+
+Animations:
+
+* Leaves moving
+* Water flowing
+* Birds flying
+
+Colors:
+Green
+Cream
+Earth tones
+
+Mood:
+Minimal, peaceful, balanced.
+
+---
+
+# Performance Requirements
+
+* Maintain 60 FPS on modern devices.
+* Respect `prefers-reduced-motion`.
+* Use GPU-accelerated transforms.
+* Lazy-load heavy assets.
+* Optimize particle systems.
+* Ensure animations never reduce readability.
+* Preserve excellent contrast and accessibility.
+
+---
+
+# Overall Goal
+
+This should not look like a simple color theme. Each theme must feel like entering a completely different world with cinematic visuals, ambient animations, premium micro-interactions, and immersive storytelling while maintaining a clean, modern, and highly usable user experience.
