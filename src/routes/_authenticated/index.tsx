@@ -122,19 +122,31 @@ function InboxPage() {
                       <span className="text-xs text-muted-foreground">{timeAgo(g.created_at)}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    {g.artwork_url && (
-                      <img src={g.artwork_url} alt="" className="h-16 w-16 rounded-sm shadow-sm" />
-                    )}
-                    <div className="min-w-0">
-                      <p className="font-serif text-lg leading-snug truncate">{g.track_name}</p>
-                      <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
+                  {unread ? (
+                    <div className="flex items-center justify-center py-6 border border-dashed border-border/50 rounded-sm bg-secondary/30 mt-2">
+                      <p className="font-serif italic text-foreground/70">A song for you...</p>
                     </div>
-                  </div>
-                  {g.note && (
-                    <p className="mt-4 border-t border-border pt-3 font-serif italic text-foreground/80">
-                      {`"${g.note}"`}
-                    </p>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-4">
+                        {g.artwork_url && (
+                          <img
+                            src={g.artwork_url}
+                            alt=""
+                            className="h-16 w-16 rounded-sm shadow-sm"
+                          />
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-serif text-lg leading-snug truncate">{g.track_name}</p>
+                          <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
+                        </div>
+                      </div>
+                      {g.note && (
+                        <p className="mt-4 border-t border-border pt-3 font-handwriting text-2xl text-foreground/90">
+                          {`"${g.note}"`}
+                        </p>
+                      )}
+                    </>
                   )}
                 </Link>
               </li>

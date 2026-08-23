@@ -157,17 +157,27 @@ function FriendThreadPage() {
                 params={{ id: g.id }}
                 className="block rounded-md border border-border bg-card p-4 hover:border-accent transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  {g.artwork_url && (
-                    <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />
-                  )}
-                  <div className="min-w-0">
-                    <p className="font-serif text-lg truncate">{g.track_name}</p>
-                    <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
+                {!mine && !g.read_at ? (
+                  <div className="flex items-center justify-center py-4 border border-dashed border-border/50 rounded-sm bg-secondary/30">
+                    <p className="font-serif italic text-foreground/70 text-sm">
+                      A song for you...
+                    </p>
                   </div>
-                </div>
-                {g.note && (
-                  <p className="mt-3 font-serif italic text-foreground/80 text-sm">{`"${g.note}"`}</p>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3">
+                      {g.artwork_url && (
+                        <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />
+                      )}
+                      <div className="min-w-0">
+                        <p className="font-serif text-lg truncate">{g.track_name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
+                      </div>
+                    </div>
+                    {g.note && (
+                      <p className="mt-3 font-handwriting text-2xl text-foreground/90">{`"${g.note}"`}</p>
+                    )}
+                  </>
                 )}
               </Link>
             </li>
