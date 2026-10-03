@@ -2,6 +2,7 @@ import { createFileRoute, Outlet, redirect, Link } from "@tanstack/react-router"
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ThemeBackground } from "@/components/ThemeBackground";
+import { OnboardingModal } from "@/components/OnboardingModal";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -45,6 +46,7 @@ function AuthenticatedLayout() {
   return (
     <div className="relative min-h-screen text-foreground">
       <ThemeBackground />
+      <OnboardingModal />
       <main className="relative z-10 pb-24">
         <Outlet />
       </main>

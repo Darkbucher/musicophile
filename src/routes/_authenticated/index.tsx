@@ -81,18 +81,37 @@ function InboxPage() {
       </header>
 
       {loading ? (
-        <p className="text-sm text-muted-foreground">Opening the mailbox…</p>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="rounded-md border border-border bg-card p-5 animate-pulse">
+              <div className="flex items-start justify-between mb-3">
+                <div className="h-3 w-28 rounded bg-muted" />
+                <div className="h-3 w-10 rounded bg-muted" />
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="h-16 w-16 rounded-sm bg-muted shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-3/4 rounded bg-muted" />
+                  <div className="h-3 w-1/2 rounded bg-muted" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : gifts.length === 0 ? (
-        <div className="rounded-md border border-dashed border-border px-6 py-12 text-center">
-          <p className="font-serif text-xl text-foreground">No songs yet.</p>
+        <div className="rounded-md border border-dashed border-border px-6 py-14 text-center">
+          <p className="text-4xl mb-4" aria-hidden>
+            📭
+          </p>
+          <p className="font-serif text-xl text-foreground">Nothing here yet.</p>
           <p className="mt-2 text-sm text-muted-foreground italic">
-            When a friend sends you one, it'll land here.
+            When a friend sends you a song, it will land here like a letter.
           </p>
           <Link
             to="/friends"
             className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent"
           >
-            Find a friend
+            Find a friend →
           </Link>
         </div>
       ) : (
