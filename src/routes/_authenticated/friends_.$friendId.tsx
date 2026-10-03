@@ -6,6 +6,7 @@ import { extractYouTubeId, youtubeSearchUrl } from "@/lib/youtube";
 import { timeAgo, fullDate } from "@/lib/format";
 import { findYouTubeMatch } from "@/lib/youtube-search.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { getReaction } from "@/lib/reactions";
 
 export const Route = createFileRoute("/_authenticated/friends_/$friendId")({
   component: FriendThreadPage,
@@ -20,6 +21,7 @@ interface Gift {
   id: string;
   sender_id: string;
   recipient_id: string;
+  track_id: string | null;
   track_name: string;
   artist_name: string;
   artwork_url: string | null;
@@ -59,7 +61,7 @@ function FriendThreadPage() {
     const { data } = await supabase
       .from("gifts")
       .select(
-        "id,sender_id,recipient_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at",
+        "id,sender_id,recipient_id,track_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at",
       )
       .or(
         `and(sender_id.eq.${user.id},recipient_id.eq.${friendId}),and(sender_id.eq.${friendId},recipient_id.eq.${user.id})`,
@@ -142,15 +144,32 @@ function FriendThreadPage() {
       <ol className="space-y-6 border-l border-border pl-5">
         {gifts.map((g) => {
           const mine = g.sender_id === user.id;
+          const reaction = getReaction(g.track_id);
           return (
             <li key={g.id} className="relative">
               <span
                 className={`absolute -left-[26px] top-2 inline-block h-2 w-2 rounded-full ${mine ? "bg-muted-foreground/50" : "bg-accent"}`}
               />
-              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">
-                {mine ? "you sent" : `${friend?.display_name ?? "they"} sent`}
-                <span className="mx-2 text-muted-foreground/60">·</span>
-                <span title={fullDate(g.created_at)}>{timeAgo(g.created_at)}</span>
+              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2 flex items-center justify-between gap-2">
+                <div>
+                  {mine ? "you sent" : `${friend?.display_name ?? "they"} sent`}
+                  <span className="mx-2 text-muted-foreground/60">·</span>
+                  <span title={fullDate(g.created_at)}>{timeAgo(g.created_at)}</span>
+                </div>
+                {mine && (
+                  <span className="text-[10px] tracking-normal font-sans shrink-0">
+                    {g.read_at ? (
+                      <span className="text-accent font-medium flex items-center gap-1">
+                        <span aria-hidden>✓</span> opened {timeAgo(g.read_at)}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground/60 flex items-center gap-1">
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />{" "}
+                        delivered
+                      </span>
+                    )}
+                  </span>
+                )}
               </div>
               <Link
                 to="/gift/$id"
@@ -167,15 +186,31 @@ function FriendThreadPage() {
                   <>
                     <div className="flex items-center gap-3">
                       {g.artwork_url && (
-                        <img src={g.artwork_url} alt="" className="h-14 w-14 rounded-sm" />
+                        <img
+                          src={g.artwork_url}
+                          alt=""
+                          className="h-14 w-14 rounded-sm object-cover"
+                        />
                       )}
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="font-serif text-lg truncate">{g.track_name}</p>
                         <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
                       </div>
+                      {reaction && (
+                        <span className="text-2xl shrink-0 leading-none" title="Reaction">
+                          {reaction}
+                        </span>
+                      )}
                     </div>
                     {g.note && (
                       <p className="mt-3 font-handwriting text-2xl text-foreground/90">{`"${g.note}"`}</p>
+                    )}
+                    {reaction && (
+                      <p className="mt-2 text-[11px] text-muted-foreground italic border-t border-border pt-1.5">
+                        {mine
+                          ? `${friend?.display_name ?? "They"} reacted with ${reaction}`
+                          : `You reacted with ${reaction}`}
+                      </p>
                     )}
                   </>
                 )}

@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ThemeBackground } from "@/components/ThemeBackground";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { resolveAuthSession } from "@/lib/auth-session";
+import { showSongNotification } from "@/lib/notifications";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -36,7 +37,22 @@ function AuthenticatedLayout() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "gifts", filter: `recipient_id=eq.${user.id}` },
-        () => refresh(),
+        async (payload) => {
+          refresh();
+          if (payload.eventType === "INSERT") {
+            const newGift = payload.new as { sender_id?: string; track_name?: string } | undefined;
+            let senderName = "A friend";
+            if (newGift?.sender_id) {
+              const { data } = await supabase
+                .from("profiles")
+                .select("display_name")
+                .eq("id", newGift.sender_id)
+                .maybeSingle();
+              if (data?.display_name) senderName = data.display_name;
+            }
+            showSongNotification(senderName, newGift?.track_name);
+          }
+        },
       )
       .subscribe();
     return () => {

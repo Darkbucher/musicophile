@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { timeAgo, fullDate } from "@/lib/format";
+import { getReaction } from "@/lib/reactions";
 
 export const Route = createFileRoute("/_authenticated/sent")({
   component: SentPage,
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/sent")({
 interface Gift {
   id: string;
   recipient_id: string;
+  track_id: string | null;
   track_name: string;
   artist_name: string;
   artwork_url: string | null;
@@ -32,7 +34,9 @@ function SentPage() {
     (async () => {
       const { data } = await supabase
         .from("gifts")
-        .select("id,recipient_id,track_name,artist_name,artwork_url,note,created_at,read_at")
+        .select(
+          "id,recipient_id,track_id,track_name,artist_name,artwork_url,note,created_at,read_at",
+        )
         .eq("sender_id", user.id)
         .order("created_at", { ascending: false });
       const list = (data as Gift[] | null) ?? [];
@@ -92,63 +96,77 @@ function SentPage() {
         </div>
       ) : (
         <ul className="space-y-4">
-          {gifts.map((g) => (
-            <li key={g.id}>
-              <Link
-                to="/gift/$id"
-                params={{ id: g.id }}
-                className="block rounded-md border border-border bg-card p-5 transition-colors hover:border-accent"
-              >
-                {/* Header row: recipient + timestamp + read receipt */}
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    to{" "}
-                    <span className="text-foreground">
-                      {profiles[g.recipient_id]?.display_name ?? "a friend"}
-                    </span>
-                    <span className="mx-2 text-muted-foreground/60">·</span>
-                    {timeAgo(g.created_at)}
-                  </p>
-                  {/* Read receipt badge */}
-                  {g.read_at ? (
-                    <span
-                      title={`Opened ${fullDate(g.read_at)}`}
-                      className="shrink-0 text-[10px] uppercase tracking-[0.12em] text-accent/80 flex items-center gap-1"
-                    >
-                      <span aria-hidden>✓</span> opened
-                    </span>
-                  ) : (
-                    <span className="shrink-0 text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60">
-                      unopened
-                    </span>
-                  )}
-                </div>
+          {gifts.map((g) => {
+            const reaction = getReaction(g.track_id);
+            const friendName = profiles[g.recipient_id]?.display_name ?? "a friend";
 
-                {/* Track row */}
-                <div className="flex items-center gap-4">
-                  {g.artwork_url && (
-                    <img
-                      src={g.artwork_url}
-                      alt=""
-                      loading="lazy"
-                      className="h-14 w-14 rounded-sm shrink-0"
-                    />
-                  )}
-                  <div className="min-w-0">
-                    <p className="font-serif text-lg truncate">{g.track_name}</p>
-                    <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
+            return (
+              <li key={g.id}>
+                <Link
+                  to="/gift/$id"
+                  params={{ id: g.id }}
+                  className="block rounded-md border border-border bg-card p-5 transition-colors hover:border-accent"
+                >
+                  {/* Header row: recipient + timestamp + read receipt */}
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                      to <span className="text-foreground">{friendName}</span>
+                      <span className="mx-2 text-muted-foreground/60">·</span>
+                      {timeAgo(g.created_at)}
+                    </p>
+
+                    {/* Read receipt badge */}
+                    {g.read_at ? (
+                      <span
+                        title={`Opened ${fullDate(g.read_at)}`}
+                        className="shrink-0 text-[10px] uppercase tracking-[0.12em] text-accent font-medium flex items-center gap-1"
+                      >
+                        <span aria-hidden>✓</span> opened {timeAgo(g.read_at)}
+                      </span>
+                    ) : (
+                      <span className="shrink-0 text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60 flex items-center gap-1.5">
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
+                        delivered
+                      </span>
+                    )}
                   </div>
-                </div>
 
-                {/* Note */}
-                {g.note && (
-                  <p className="mt-3 font-handwriting text-2xl text-foreground/80 border-t border-border pt-3">
-                    {`"${g.note}"`}
-                  </p>
-                )}
-              </Link>
-            </li>
-          ))}
+                  {/* Track row */}
+                  <div className="flex items-center gap-4">
+                    {g.artwork_url && (
+                      <img
+                        src={g.artwork_url}
+                        alt=""
+                        loading="lazy"
+                        className="h-14 w-14 rounded-sm shrink-0 object-cover"
+                      />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="font-serif text-lg truncate">{g.track_name}</p>
+                      <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
+                    </div>
+
+                    {/* Emoji Reaction Pill if present */}
+                    {reaction && (
+                      <span
+                        className="shrink-0 text-2xl bg-background/80 border border-border rounded-full px-2.5 py-1 shadow-sm leading-none"
+                        title={`${friendName} reacted with ${reaction}`}
+                      >
+                        {reaction}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Note */}
+                  {g.note && (
+                    <p className="mt-3 font-handwriting text-2xl text-foreground/85 border-t border-border pt-3">
+                      {`"${g.note}"`}
+                    </p>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { fullDate } from "@/lib/format";
+import { fullDate, timeAgo } from "@/lib/format";
 import { youtubeSearchUrl } from "@/lib/youtube";
 import { useTheme } from "@/lib/theme";
 import { FlowerRevealPetals } from "@/components/ThemeBackground";
+import { getReaction, setReactionInTrackId, EMOJI_REACTIONS } from "@/lib/reactions";
 
 export const Route = createFileRoute("/_authenticated/gift/$id")({
   component: GiftDetailPage,
@@ -14,6 +15,7 @@ interface Gift {
   id: string;
   sender_id: string;
   recipient_id: string;
+  track_id: string | null;
   track_name: string;
   artist_name: string;
   artwork_url: string | null;
@@ -40,6 +42,7 @@ function GiftDetailPage() {
   const [opened, setOpened] = useState(false);
   const [reveal, setReveal] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [reacting, setReacting] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +73,23 @@ function GiftDetailPage() {
     setReveal(true);
     setTimeout(() => setOpened(true), 700);
     if (gift.recipient_id === user.id && !gift.read_at) {
-      await supabase.from("gifts").update({ read_at: new Date().toISOString() }).eq("id", gift.id);
+      const now = new Date().toISOString();
+      await supabase.from("gifts").update({ read_at: now }).eq("id", gift.id);
+      setGift((prev) => (prev ? { ...prev, read_at: now } : prev));
+    }
+  }
+
+  async function handleReact(emoji: string) {
+    if (!gift || gift.recipient_id !== user.id) return;
+    setReacting(true);
+    const newTrackId = setReactionInTrackId(gift.track_id, emoji);
+    setGift((prev) => (prev ? { ...prev, track_id: newTrackId } : prev));
+    try {
+      await supabase.from("gifts").update({ track_id: newTrackId }).eq("id", gift.id);
+    } catch (e) {
+      console.error("Failed to save reaction:", e);
+    } finally {
+      setReacting(false);
     }
   }
 
@@ -86,7 +105,7 @@ function GiftDetailPage() {
       <div className="mx-auto max-w-md px-6 pt-12 text-center">
         <p className="font-serif text-xl text-foreground">Song not found.</p>
         <p className="mt-2 text-sm text-muted-foreground italic">
-          It may have been deleted or you don't have access.
+          It may have been deleted or you don&apos;t have access.
         </p>
         <Link to="/" className="mt-6 inline-block text-xs uppercase tracking-[0.18em] text-accent">
           ← inbox
@@ -104,6 +123,7 @@ function GiftDetailPage() {
   const mine = gift.sender_id === user.id;
   const fromName = mine ? "You" : (sender?.display_name ?? "A friend");
   const toName = mine ? (recipient?.display_name ?? "your friend") : "you";
+  const currentReaction = getReaction(gift.track_id);
 
   if (!opened) {
     return (
@@ -139,7 +159,7 @@ function GiftDetailPage() {
               </div>
             )}
           </div>
-          <p className="mt-10 font-serif text-2xl text-foreground">You've received a song.</p>
+          <p className="mt-10 font-serif text-2xl text-foreground">You&apos;ve received a song.</p>
           <p className="mt-2 text-sm italic text-muted-foreground">Take a quiet moment.</p>
           <button
             onClick={openEnvelope}
@@ -168,13 +188,29 @@ function GiftDetailPage() {
           {fromName} → {toName}
         </p>
         <p className="mt-1 text-xs text-muted-foreground">{fullDate(gift.created_at)}</p>
+
+        {/* Read Receipt Details for Sender */}
+        {mine && (
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3.5 py-1 text-xs">
+            {gift.read_at ? (
+              <span className="text-accent flex items-center gap-1 font-medium">
+                <span aria-hidden>✓</span> Opened by {toName} {timeAgo(gift.read_at)}
+              </span>
+            ) : (
+              <span className="text-muted-foreground/80 italic flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
+                Waiting for {toName} to open
+              </span>
+            )}
+          </div>
+        )}
       </header>
 
       {gift.artwork_url && (
         <img
           src={gift.artwork_url}
           alt=""
-          className="mx-auto mb-8 h-56 w-56 rounded-sm shadow-md"
+          className="mx-auto mb-8 h-56 w-56 rounded-sm shadow-md object-cover"
         />
       )}
 
@@ -223,10 +259,66 @@ function GiftDetailPage() {
         </div>
       )}
 
+      {/* Emoji Reactions Section */}
+      <section className="mb-10 rounded-xl border border-border bg-card/70 p-5 text-center shadow-sm">
+        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-3">
+          {currentReaction
+            ? mine
+              ? `${toName} reacted to this song`
+              : "Your reaction"
+            : mine
+              ? "No reaction yet"
+              : "Acknowledge this song with a reaction"}
+        </p>
+
+        {currentReaction && (
+          <div className="my-3 flex items-center justify-center gap-2">
+            <span className="text-4xl animate-bounce leading-none" role="img" aria-label="reaction">
+              {currentReaction}
+            </span>
+            {mine && (
+              <span className="font-serif italic text-sm text-foreground/85">
+                {toName} felt this
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Recipient can select or change reaction */}
+        {!mine && (
+          <div className="mt-2">
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              {EMOJI_REACTIONS.map((emoji) => {
+                const isSelected = currentReaction === emoji;
+                return (
+                  <button
+                    key={emoji}
+                    type="button"
+                    disabled={reacting}
+                    onClick={() => handleReact(emoji)}
+                    className={`text-2xl p-2.5 rounded-full transition-all duration-150 hover:scale-125 active:scale-95 disabled:opacity-50 ${
+                      isSelected
+                        ? "bg-accent/25 ring-2 ring-accent scale-110 shadow-sm"
+                        : "hover:bg-secondary/60 bg-background/50"
+                    }`}
+                    title={`React with ${emoji}`}
+                  >
+                    {emoji}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-3 text-[11px] italic text-muted-foreground">
+              {currentReaction ? "Tap another emoji to change" : "Tap an emoji to react instantly"}
+            </p>
+          </div>
+        )}
+      </section>
+
       {mine && (
         <button
           onClick={deleteGift}
-          className="mt-4 w-full text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-destructive"
+          className="mt-4 w-full text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-destructive transition-colors"
         >
           delete this gift
         </button>

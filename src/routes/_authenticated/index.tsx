@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { timeAgo } from "@/lib/format";
+import { getReaction } from "@/lib/reactions";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: InboxPage,
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/")({
 interface Gift {
   id: string;
   sender_id: string;
+  track_id: string | null;
   track_name: string;
   artist_name: string;
   artwork_url: string | null;
@@ -34,7 +36,7 @@ function InboxPage() {
     const { data } = await supabase
       .from("gifts")
       .select(
-        "id,sender_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at",
+        "id,sender_id,track_id,track_name,artist_name,artwork_url,note,youtube_video_id,created_at,read_at",
       )
       .eq("recipient_id", user.id)
       .order("created_at", { ascending: false });
@@ -152,13 +154,21 @@ function InboxPage() {
                           <img
                             src={g.artwork_url}
                             alt=""
-                            className="h-16 w-16 rounded-sm shadow-sm"
+                            className="h-16 w-16 rounded-sm shadow-sm object-cover"
                           />
                         )}
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className="font-serif text-lg leading-snug truncate">{g.track_name}</p>
                           <p className="text-sm text-muted-foreground truncate">{g.artist_name}</p>
                         </div>
+                        {getReaction(g.track_id) && (
+                          <span
+                            className="text-2xl shrink-0 leading-none"
+                            title={`You reacted with ${getReaction(g.track_id)}`}
+                          >
+                            {getReaction(g.track_id)}
+                          </span>
+                        )}
                       </div>
                       {g.note && (
                         <p className="mt-4 border-t border-border pt-3 font-handwriting text-2xl text-foreground/90">

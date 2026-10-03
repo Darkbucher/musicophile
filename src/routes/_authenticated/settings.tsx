@@ -148,6 +148,17 @@ function SettingsPage() {
         </div>
       </section>
 
+      <section className="mb-12 rounded-md border border-border bg-card p-5">
+        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Notifications</p>
+        <p className="mt-2 text-sm text-foreground">Song Arrival Alerts</p>
+        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+          Receive a notification the moment a friend sends you a song so you never miss a letter.
+        </p>
+        <div className="mt-4">
+          <NotificationButton />
+        </div>
+      </section>
+
       <section>
         <button
           onClick={signOut}
@@ -157,5 +168,89 @@ function SettingsPage() {
         </button>
       </section>
     </div>
+  );
+}
+
+function NotificationButton() {
+  const [permission, setPermission] = useState<NotificationPermission | "unsupported">("default");
+  const [testing, setTesting] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && "Notification" in window) {
+      setPermission(Notification.permission);
+    } else {
+      setPermission("unsupported");
+    }
+  }, []);
+
+  async function handleEnable() {
+    if (typeof window === "undefined" || !("Notification" in window)) return;
+    try {
+      const res = await Notification.requestPermission();
+      setPermission(res);
+      if (res === "granted" && "serviceWorker" in navigator) {
+        await navigator.serviceWorker.register("/sw.js").catch(() => {});
+        new Notification("Musicophile 💌", {
+          body: "Notifications are now active! You will be alerted when friends send you songs.",
+          icon: "/icon.svg",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function handleTest() {
+    if (typeof window === "undefined" || !("Notification" in window)) return;
+    setTesting(true);
+    new Notification("Musicophile 💌", {
+      body: "A friend sent you a song. Take a quiet moment.",
+      icon: "/icon.svg",
+    });
+    setTimeout(() => setTesting(false), 2000);
+  }
+
+  if (permission === "unsupported") {
+    return (
+      <p className="text-xs text-muted-foreground italic">
+        Notifications are not supported in this browser.
+      </p>
+    );
+  }
+
+  if (permission === "granted") {
+    return (
+      <div className="flex items-center gap-3">
+        <span className="text-xs text-accent font-medium flex items-center gap-1.5">
+          <span>✓</span> Notifications enabled
+        </span>
+        <button
+          type="button"
+          onClick={handleTest}
+          disabled={testing}
+          className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground underline underline-offset-4"
+        >
+          {testing ? "Sent!" : "Send test"}
+        </button>
+      </div>
+    );
+  }
+
+  if (permission === "denied") {
+    return (
+      <p className="text-xs text-muted-foreground italic">
+        Notifications are blocked. Please enable them in your browser site settings.
+      </p>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleEnable}
+      className="rounded-md border border-border bg-card px-4 py-2 text-xs uppercase tracking-[0.18em] text-accent hover:border-accent transition-colors"
+    >
+      Turn on notifications
+    </button>
   );
 }
