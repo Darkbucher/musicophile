@@ -1,12 +1,13 @@
 import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveAuthSession } from "@/lib/auth-session";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
   beforeLoad: async () => {
-    const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/" });
+    const user = await resolveAuthSession();
+    if (user) throw redirect({ to: "/" });
   },
   component: AuthPage,
 });
@@ -22,7 +23,12 @@ function AuthPage() {
   const [emailSent, setEmailSent] = useState(false);
   const [magicSent, setMagicSent] = useState(false);
 
-  // Automatically redirect when user signs in via email magic link
+  // OTP code input support (if user receives 6-digit code in email)
+  const [otpCode, setOtpCode] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState<string | null>(null);
+
+  // Automatically redirect when user signs in via email magic link or token
   useEffect(() => {
     const {
       data: { subscription },
@@ -80,6 +86,27 @@ function AuthPage() {
     }
   }
 
+  async function verifyOtp(e: React.FormEvent) {
+    e.preventDefault();
+    setOtpError(null);
+    setOtpLoading(true);
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: otpCode.trim(),
+        type: "email",
+      });
+      if (error) throw error;
+      if (data.user) {
+        navigate({ to: "/" });
+      }
+    } catch (err: unknown) {
+      setOtpError(err instanceof Error ? err.message : "Invalid code. Please try again.");
+    } finally {
+      setOtpLoading(false);
+    }
+  }
+
   if (magicSent) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6 bg-background">
@@ -87,15 +114,51 @@ function AuthPage() {
           <h1 className="font-serif text-5xl text-foreground">Musicophile</h1>
           <p className="mt-8 font-serif text-2xl text-foreground">Check your email.</p>
           <p className="mt-3 text-sm text-muted-foreground italic leading-relaxed">
-            We sent a direct login link to{" "}
-            <span className="text-foreground font-medium">{email}</span>. Open your Gmail or inbox
-            and tap the link to log in instantly without a password.
+            We sent a direct login link and code to{" "}
+            <span className="text-foreground font-medium">{email}</span>.
           </p>
+
+          <div className="mt-6 rounded-md border border-border bg-card/60 p-4 text-left">
+            <p className="text-xs text-foreground font-medium">Option 1: Direct link</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Tap the link in your Gmail/email to log in automatically.
+            </p>
+          </div>
+
+          <div className="mt-4 rounded-md border border-border bg-card/60 p-4 text-left">
+            <p className="text-xs text-foreground font-medium">Option 2: 6-digit code</p>
+            <p className="text-xs text-muted-foreground mt-1 mb-3">
+              Received a 6-digit code? Enter it here:
+            </p>
+            <form onSubmit={verifyOtp} className="space-y-3">
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={6}
+                placeholder="123456"
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-center text-lg tracking-[0.3em] font-mono outline-none focus:border-accent"
+              />
+              <button
+                type="submit"
+                disabled={otpLoading || otpCode.length < 6}
+                className="w-full rounded-md bg-primary py-2 text-xs uppercase tracking-[0.18em] text-primary-foreground disabled:opacity-50"
+              >
+                {otpLoading ? "Verifying…" : "Verify code & Log in"}
+              </button>
+              {otpError && <p className="text-xs text-destructive">{otpError}</p>}
+            </form>
+          </div>
+
           <button
             type="button"
-            className="mt-8 text-xs uppercase tracking-[0.18em] text-accent hover:underline"
+            className="mt-6 text-xs uppercase tracking-[0.18em] text-accent hover:underline"
             onClick={() => {
               setMagicSent(false);
+              setOtpCode("");
+              setOtpError(null);
               setMode("sign-in");
             }}
           >
@@ -141,8 +204,8 @@ function AuthPage() {
 
         {mode === "magic" && (
           <p className="mb-5 text-center text-xs text-muted-foreground leading-relaxed">
-            Forgot your password? Enter your email address and we will send a direct login link
-            straight to your inbox.
+            Forgot your password? Enter your email address and we will send a direct login link and
+            code straight to your inbox.
           </p>
         )}
 

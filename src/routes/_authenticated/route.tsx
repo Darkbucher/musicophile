@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ThemeBackground } from "@/components/ThemeBackground";
 import { OnboardingModal } from "@/components/OnboardingModal";
+import { resolveAuthSession } from "@/lib/auth-session";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/auth" });
-    return { user: data.user };
+    const user = await resolveAuthSession();
+    if (!user) throw redirect({ to: "/auth" });
+    return { user };
   },
   component: AuthenticatedLayout,
 });
